@@ -19,12 +19,15 @@ func (dm DefaultMapping) OnHandle(resp GTResponse, req * GTRequest) {
 
 
 
+func stest(resp GTResponse, req * GTRequest) {
+}
+
+
 
 
 
 func TestAddMappingUri(t *testing.T) {
-   dm := DefaultMapping{}
-   SerCtx.AddMappingUri("/tst", dm)
+   SerCtx.AddMappingUri("/tst", stest)
 
    mp := SerCtx.GetMapping("/tst")
 
@@ -33,7 +36,6 @@ func TestAddMappingUri(t *testing.T) {
       t.FailNow()
    }
 
-   mp.hld.OnHandle(GTResponse{}, nil)
    t.Logf("===== finish test TestAddMapping")
 }
 

@@ -6,6 +6,7 @@ package gotom
 import (
     "log"
     "os"
+    "fmt"
 )
 
 const (
@@ -37,11 +38,14 @@ func LE(format string, v  ...interface{}) {
 }
 
 func LV(level int, format string, v ...interface{}) {
-   GoTomLogger.Printf(format, v...) 
+   GoTomLogger.Output(4, fmt.Sprintf(format, v...)) 
 }
 
 
 func LP(format string, v ...interface{}) {
+    if v == nil {
+        return
+    }
     GoTomLogger.Panicf(format, v...)
 }
 

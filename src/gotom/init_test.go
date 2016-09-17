@@ -23,8 +23,7 @@ func TestInitContext(t *testing.T) {
 
 
 func TestInitMapping(t *testing.T) {
-
-    LP("ssss")
+LP("ssss")
     InitContext()
 
     mappings := make([]*Mapping, 10, 10)
@@ -41,6 +40,25 @@ func TestInitMapping(t *testing.T) {
               t.Fatal(" failed at %s\n", mp)
         }
     }
-
     
+}
+
+
+func testOnHandler(resp GTResponse, req * GTRequest) {
+     LD("==== on Hanlder \n")
+}
+
+
+func TestInitServer(t * testing.T) {
+    InitContext()
+
+    mappings := make([]*Mapping, 10, 10)
+
+    for idx := 0 ; idx < cap(mappings); idx++ {
+         mappings[idx] = &Mapping{uri:"/test" + strconv.FormatInt(int64(idx), 10), hld : testOnHandler}
+    } 
+    
+    InitMappings(mappings)
+
+    InitServer(nil)
 }
