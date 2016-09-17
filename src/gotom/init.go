@@ -54,15 +54,17 @@ func InitServer(conf * GTConfig) {
    InitContext()
 
    if conf == nil {
-         conf = & GTConfig{port : ":8080", tpldir : "./view/"}
+         conf = & GTConfig{Port : ":8080", Tpldir : "./view/"}
    }
 
+   InitMappings(conf.Mapping)
+
    LI(" Server Config :%s\n", conf)
-   http.Handle("/", http.FileServer(http.Dir(conf.tpldir)))
+   http.Handle("/", http.FileServer(http.Dir(conf.Tpldir)))
    for key, value := range SerCtx.mapping {
-        http.HandleFunc(key, value.hld.OnHandler)
+        http.HandleFunc(key, value.Hld.OnHandler)
    }
-   http.ListenAndServe(conf.port, nil)
+   http.ListenAndServe(conf.Port, nil)
 }
    
 

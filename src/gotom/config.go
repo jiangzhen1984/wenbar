@@ -5,7 +5,9 @@ package gotom
 
 type GTConfig struct {
 
-     port     string
+     Port     string
      
-     tpldir   string
+     Tpldir   string
+
+     Mapping []*Mapping 
 }

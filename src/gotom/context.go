@@ -36,12 +36,12 @@ type GTServerContext struct {
 
 type GTSession struct {
 
-    id         uint64
+    Id         uint64
 
     attrs      map[string]string
     mu         sync.Mutex
 
-    ctx        *GTServerContext
+    Ctx        *GTServerContext
 
     valid    bool
 }
@@ -49,28 +49,28 @@ type GTSession struct {
 
 type GTRequest struct {
 
-    req        *http.Request
+    Req        *http.Request
 
     attrs      map[string]string
     mu         sync.Mutex
 
     sess       *GTSession
-    ctx        *GTServerContext
+    Ctx        *GTServerContext
 }
 
 
 type GTResponse struct {
 
-    resp       *http.ResponseWriter
+    Resp       *http.ResponseWriter
 }
 
 
 
 type Mapping struct {
 
-    uri        string
+    Uri        string
 
-    hld        GoTomHandler
+    Hld        GoTomHandler
 }
 
 
@@ -125,8 +125,8 @@ func (ctx * GTServerContext) CreateSession() *GTSession {
     }
 
     sid  := uint64(rand.Int63())
-    session := &GTSession{id:sid, attrs:nil} 
-    session.ctx =  SerCtx
+    session := &GTSession{Id:sid, attrs:nil} 
+    session.Ctx =  SerCtx
     session.valid = true
     
     ctx.sess[sid] = session 
@@ -157,7 +157,7 @@ func (ctx * GTServerContext) AddMappingUri(uri string, hdr GoTomHandler) EnumRet
          }
     }
 
-    ctx.mapping[uri] = & Mapping{uri : uri, hld : hdr}
+    ctx.mapping[uri] = & Mapping{Uri : uri, Hld : hdr}
     
     return NO_ERR
 }
@@ -177,13 +177,13 @@ func (ctx * GTServerContext) AddMapping(mapping * Mapping) EnumRet {
     if ctx.mapping == nil {
          ctx.mapping = make(map[string]*Mapping)
     } else {
-         mh :=  ctx.mapping[mapping.uri]
+         mh :=  ctx.mapping[mapping.Uri]
          if mh != nil {
                 return ERR_KEY_DUPLICATE
          }
     }
 
-    ctx.mapping[mapping.uri] = mapping
+    ctx.mapping[mapping.Uri] = mapping
     return NO_ERR
 }
 
@@ -213,9 +213,9 @@ func (ctx * GTServerContext) UpdateMapping(uri string, hdr  GoTomHandler) {
 
     mp := ctx.mapping[uri]
     if mp != nil {
-         mp.hld = hdr
+         mp.Hld = hdr
     } else {
-         ctx.mapping[uri] = & Mapping {uri : uri, hld : hdr}
+         ctx.mapping[uri] = & Mapping {Uri : uri, Hld : hdr}
     }
 }
 
@@ -281,16 +281,24 @@ func (sess * GTSession) RemoveAttribute(key string) {
 
 func (sess * GTSession) Invalidate() {
     if sess == nil {
-        LP("Session is null\n")
+         LP("Session is null\n")
     }
 
-    sess.ctx.RemoveSession(sess.id) 
+    sess.Ctx.RemoveSession(sess.Id) 
     sess.valid = false
 }
 
 
+func (sess * GTSession) IsVaild() bool {
+     if sess == nil  || sess.valid == false {
+         return false
+     }
+     return true
+}
+
+
 func (sess GTSession) String() string {
-     return "(" + strconv.FormatUint(sess.id, 10) +", "+strconv.FormatBool(sess.valid)+")"
+     return "(" + strconv.FormatUint(sess.Id, 10) +", "+strconv.FormatBool(sess.valid)+")"
 }
 
 func (req * GTRequest) GetAttribute(key string) string {
@@ -320,6 +328,21 @@ func (req * GTRequest) RemoveAttribute(key string) {
     }
 
     delete(req.attrs, key)
+}
+
+
+func (req * GTRequest) GetSession(create bool) *GTSession {
+    
+     if req == nil {
+          return nil
+     }
+
+     if req.sess == nil {
+         sess := req.Ctx.CreateSession()
+         req.sess =  sess;
+     }
+
+     return req.sess
 }
 
 
