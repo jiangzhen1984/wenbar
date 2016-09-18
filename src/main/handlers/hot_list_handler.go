@@ -4,23 +4,20 @@ package handlers
 
 import (
     "gotom"
+    "gotom/tpl"
     "html/template"
     "main/vo"
 )
 
 
-func HotListHandler(resp gotom.GTResponse, req * gotom.GTRequest) {
+func HotListHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * tpl.GTTemplateMapping)  *gotom.GTTemplate, gotom.data, error {
 
-     t, err := template.ParseFiles("./view/hot_list.html")
-     gotom.LE(" parse hot list file err:%s\n", err)
-     if err != nil {
-            gotom.LE(" parse hot list file err:%s\n", err)
-            return
+     if tpls == nil {
+          return nil, nil, nil
      }
-
      data := vo.HotListHtml{Title :"sss" , TopicList : []vo.Topic{{Title:"s"},{Title:"s"},{Title:"s"}}}
-     t.Execute(*resp.Resp, data)
-     gotom.LD("=====output  \n")
+
+     return nil, data, nil
 }
 
 

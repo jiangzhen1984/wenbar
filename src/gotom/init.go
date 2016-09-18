@@ -64,6 +64,8 @@ func InitServer(conf * GTConfig) {
    for key, value := range SerCtx.mapping {
         http.HandleFunc(key, value.Hld.OnHandler)
    }
+
+   GConf = conf
    http.ListenAndServe(conf.Port, nil)
 }
    
