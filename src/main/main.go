@@ -8,7 +8,11 @@ import (
 
 
 func testHandler1(resp gotom.GTResponse, req * gotom.GTRequest) {
-     sess := req.GetSession(true)
+     sess := req.GetSession()
+     if sess == nil {
+           sess = req.CreateSession(resp)
+           gotom.LD("==create session =%s\n", sess)
+     }
      gotom.LD("===%s\n", sess)
 }
 

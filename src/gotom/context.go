@@ -331,18 +331,30 @@ func (req * GTRequest) RemoveAttribute(key string) {
 }
 
 
-func (req * GTRequest) GetSession(create bool) *GTSession {
+func (req * GTRequest) GetSession() *GTSession {
     
      if req == nil {
           return nil
      }
 
-     if req.sess == nil {
-         sess := req.Ctx.CreateSession()
-         req.sess =  sess;
+     return req.sess
+}
+
+
+func (req * GTRequest) CreateSession(resp GTResponse) *GTSession {
+  
+     if req.sess != nil {
+         LE(" Session alreay exist %s\n")
+         return req.sess
      }
 
-     return req.sess
+ 
+     sess := req.Ctx.CreateSession()
+
+     LD("====create session%s\n", sess)
+     http.SetCookie(*(resp.Resp), &http.Cookie{Name : GOTOM_SESSION_ID, Value : strconv.FormatUint(sess.Id, 10)})
+     
+     return sess
 }
 
 

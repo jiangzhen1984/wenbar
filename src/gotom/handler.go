@@ -16,13 +16,10 @@ func (gth GoTomHandler) OnHandler(resp http.ResponseWriter, req * http.Request) 
               sess = SerCtx.GetSession(idv)
          }
     }
+
     LI(" request session :%s\n", sess)
     greq := &GTRequest{Req : req, sess : sess, Ctx : SerCtx}
     gth(GTResponse{Resp : &resp}, greq)
-    sess = greq.GetSession(false)
-    if sess != nil {
-        http.SetCookie(resp, &http.Cookie{Name : GOTOM_SESSION_ID, Value : strconv.FormatUint(sess.Id, 10)})
-    }
 }
 
 

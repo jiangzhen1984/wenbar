@@ -38,7 +38,7 @@ func LE(format string, v  ...interface{}) {
 }
 
 func LV(level int, format string, v ...interface{}) {
-   GoTomLogger.Output(4, fmt.Sprintf(format, v...)) 
+   GoTomLogger.Output(3, fmt.Sprintf(format, v...)) 
 }
 
 
