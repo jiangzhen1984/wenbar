@@ -4,6 +4,7 @@ package main
 
 import (
     "gotom"
+    "main/handlers"
 )
 
 
@@ -19,7 +20,7 @@ func testHandler1(resp gotom.GTResponse, req * gotom.GTRequest) {
 var conf *gotom.GTConfig = &gotom.GTConfig { 
         Port    : ":8080", 
         Tpldir  : "./view/",
-        Mapping : []*gotom.Mapping{{"/test1", testHandler1}, {"/test1", testHandler1}},
+        Mapping : []*gotom.Mapping{{"/test1", handlers.HotListHandler}},
 }
 
 
