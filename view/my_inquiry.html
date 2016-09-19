@@ -15,7 +15,7 @@
 </div>
 
 
-
+  {{range .TopicList}}
   <div class="topic">
         <div class="topic_detail">             
              <div class="topic_detail_left">
@@ -28,7 +28,7 @@
              <div class="clear"></div>
         </div>
         <div class="topic_tit">
-           生命科学真的离我们生活很远吗？
+           {{.Title}} <!-- 生命科学真的离我们生活很远吗？ -->
         </div>
         <div class="topic_detail">             
              <span class="topic_detail_author">         </span>
@@ -46,137 +46,7 @@
           <div class="clear"></div>
         </div>
    </div>
-
-
-
-  <div class="topic">
-        <div class="topic_detail">             
-             <div class="topic_detail_left">
-             	<img class="topic_detail_photo" src="images/3_10.jpg" align="middle">
-                <span class="topic_detail_img"><p>张大可</p></span>
-                 <span class="topic_detail_price">$100  </span>
-             </div>
-       		 <div class="topic_detail_right">
-    		 </div>  
-             <div class="clear"></div>
-        </div>
-        <div class="topic_tit">
-           生命科学真的离我们生活很远吗？
-        </div>
-        <div class="topic_detail">             
-             <span class="topic_detail_author">         </span>
-             <div class="topic_detail_left">
-             	<img class="topic_detail_photo" src="images/3_10.jpg" align="middle">
-                <span class="topic_detail_words"><p><img class="topic_detail_bg_voice" align="top" src="images/icon_voice_13.png">1元偷偷看1元偷偷看</p></span>
-             </div>
-             <div class="clear"></div>
-           <div class="topic_detail_left_1">
-             1天前
-         </div>  
-          <div class="topic_detail_right_1">
-             看过 2156
-         </div> 
-          <div class="clear"></div>
-        </div>
-   </div>
-
-
-
-  <div class="topic">
-        <div class="topic_detail">             
-             <div class="topic_detail_left">
-             	<img class="topic_detail_photo" src="images/3_10.jpg" align="middle">
-                <span class="topic_detail_img"><p>张大可</p></span>
-                 <span class="topic_detail_price">$100  </span>
-             </div>
-       		 <div class="topic_detail_right">
-    		 </div>  
-             <div class="clear"></div>
-        </div>
-        <div class="topic_tit">
-           生命科学真的离我们生活很远吗？
-        </div>
-        <div class="topic_detail">             
-             <span class="topic_detail_author">         </span>
-             <div class="topic_detail_left">
-             	<img class="topic_detail_photo" src="images/3_10.jpg" align="middle">
-                <span class="topic_detail_words"><p><img class="topic_detail_bg_voice" align="top" src="images/icon_voice_13.png">1元偷偷看1元偷偷看</p></span>
-             </div>
-             <div class="clear"></div>
-           <div class="topic_detail_left_1">
-             1天前
-         </div>  
-          <div class="topic_detail_right_1">
-             看过 2156
-         </div> 
-          <div class="clear"></div>
-        </div>
-   </div>
-
-
-
-  <div class="topic">
-        <div class="topic_detail">             
-             <div class="topic_detail_left">
-             	<img class="topic_detail_photo" src="images/3_10.jpg" align="middle">
-                <span class="topic_detail_img"><p>张大可</p></span>
-                 <span class="topic_detail_price">$100  </span>
-             </div>
-       		 <div class="topic_detail_right">
-    		 </div>  
-             <div class="clear"></div>
-        </div>
-        <div class="topic_tit">
-           生命科学真的离我们生活很远吗？
-        </div>
-        <div class="topic_detail">             
-             <span class="topic_detail_author">         </span>
-             <div class="topic_detail_left">
-             	<img class="topic_detail_photo" src="images/3_10.jpg" align="middle">
-                <span class="topic_detail_words"><p><img class="topic_detail_bg_voice" align="top" src="images/icon_voice_13.png">1元偷偷看1元偷偷看</p></span>
-             </div>
-             <div class="clear"></div>
-           <div class="topic_detail_left_1">
-             1天前
-         </div>  
-          <div class="topic_detail_right_1">
-             看过 2156
-         </div> 
-          <div class="clear"></div>
-        </div>
-   </div>
-
-
- <div class="topic">
-        <div class="topic_detail">             
-             <div class="topic_detail_left">
-             	<img class="topic_detail_photo" src="images/3_10.jpg" align="middle">
-                <span class="topic_detail_img"><p>张大可</p></span>
-                 <span class="topic_detail_price">$100  </span>
-             </div>
-       		 <div class="topic_detail_right">
-    		 </div>  
-             <div class="clear"></div>
-        </div>
-        <div class="topic_tit">
-           生命科学真的离我们生活很远吗？
-        </div>
-        <div class="topic_detail">             
-             <span class="topic_detail_author">         </span>
-             <div class="topic_detail_left">
-             	<img class="topic_detail_photo" src="images/3_10.jpg" align="middle">
-                <span class="topic_detail_words"><p><img class="topic_detail_bg_voice" align="top" src="images/icon_voice_13.png">1元偷偷看1元偷偷看</p></span>
-             </div>
-             <div class="clear"></div>
-           <div class="topic_detail_left_1">
-             1天前
-         </div>  
-          <div class="topic_detail_right_1">
-             看过 2156
-         </div> 
-          <div class="clear"></div>
-        </div>
-   </div>
+   {{end}}
 
 
 </body>

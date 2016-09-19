@@ -3,6 +3,12 @@
 package vo
 
 
+type ItemPage struct {
+    
+     CurPage     uint32
+     PageSize    uint32
+     ItemOffset  uint32
+}
 
 type HotListHtml struct {
 
@@ -37,3 +43,19 @@ type PersonalHtml struct {
     Revenue      float32
     Fee          float32
 }
+
+
+type MyInquiryHtml struct {
+
+    TopicList   []TopicHtml
+
+    Page        ItemPage
+}
+
+type MyAnswerHtml struct {
+
+    TopicList   []TopicHtml
+
+    Page        ItemPage
+}
+

@@ -30,7 +30,7 @@ func (gth GoTomTplHandler) OnHandle(resp http.ResponseWriter, req * http.Request
             if err == nil {
                tpl.NativeTpl = tempTpl
             }  else {
-                  LE(" Load template %s failed\n", tpl.Path)
+                  LE(" Load template %s failed   %s\n", tpl.Path, err)
                   return
             }
         }

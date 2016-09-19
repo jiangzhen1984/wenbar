@@ -25,26 +25,41 @@ var conf *gotom.GTConfig = &gotom.GTConfig {
                            {"/hot_list",      handlers.HotListHandler},
                            {"/login",         handlers.LoginHandler},
                            {"/personal",      handlers.PersonalHandler},
+                           {"/logout",        handlers.LogoutHandler},
+                           {"/my_inquiry",    handlers.MyInquiryHandler},
+                           {"/question",      handlers.QuestionDetailHandler},
                       },
      TplMapping     : map[string]*gotom.GTTemplateMapping {
-                           "/hot_list" : {
+                           "/hot_list"    : {
                                              Uri  : "/hot_list",
                                              Tpls : map[string]*gotom.GTTemplate{
                                                         "hot_list" : {Name : "hot_list" , Path : "view/hot_list.html"},
                                                     },
-                                         }  ,
-                           "/login"    : {
+                                            }  ,
+                           "/login"       : {
                                              Uri  : "/login",
                                              Tpls : map[string]*gotom.GTTemplate{
-                                                        "login" : {Name : "login"    , Path : "view/login.html"},
+                                                        "login" : {Name : "login"          , Path : "view/login.html"},
                                                     },
-                                         }  ,
-                           "/personal" : {
+                                            }  ,
+                           "/personal"    : {
                                              Uri  : "/personal",
                                              Tpls : map[string]*gotom.GTTemplate{
-                                                        "personal" : {Name : "login"    , Path : "view/personal.html"},
+                                                        "personal" : {Name : "login"       , Path : "view/personal.html"},
                                                     },
-                                         }  ,
+                                            }  ,
+                           "/my_inquiry"  : {
+                                             Uri  : "/my_inquiry",
+                                             Tpls : map[string]*gotom.GTTemplate{
+                                                        "myinquiry" : {Name : "myinquiry"  , Path : "view/my_inquiry.html"},
+                                                    },
+                                            }  ,
+                           "/question"    : {
+                                                Uri  : "/question",
+                                                Tpls : map[string]*gotom.GTTemplate{
+                                                        "questiondetail" : {Name : "questiondetail"  , Path : "view/question_detail.html"},
+                                                        },
+                                            }  ,
                       },
 }
 
