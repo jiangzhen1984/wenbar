@@ -14,14 +14,14 @@ import (
 func LoginHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GTTemplateMapping)  (*gotom.GTTemplate, gotom.Object, error) {
 
      if req.Req.Method == "GET" {
-         return &gotom.GTTemplate{tpls.Tpls["login"]}, nil, nil
+         return tpls.Tpls["login"], nil, nil
      } else if req.Req.Method == "POST" {
          if req.Req.FormValue("phoneNumber") == "13811962467" {
               sess := req.CreateSession(resp)
               sess.SetAttribute("user", &vo.User{Name : "test", Title :"test"})
               http.Redirect(*resp.Resp, req.Req, "/hot_list", 301) 
          } else {
-                return &gotom.GTTemplate{tpls.Tpls["login"]}, vo.LoginHtml{ PhoneNumber: "1ee", ErrMsg : "error" }, nil
+                return tpls.Tpls["login"], vo.LoginHtml{ PhoneNumber: "1ee", ErrMsg : "error" }, nil
          }
      } else {
          http.Redirect(*resp.Resp, req.Req, "/hot_list", 301) 

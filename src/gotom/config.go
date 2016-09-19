@@ -9,6 +9,8 @@ import (
 
 type GTConfig struct {
 
+     DebugMode   bool
+
      Port        string
      
      Tpldir      string
@@ -26,12 +28,16 @@ type GTTemplateMapping struct {
 
      Uri         string
 
-     Tpls        map[string]*template.Template
+     Tpls        map[string]*GTTemplate
 }
 
 
 
 type GTTemplate struct {
+     
+     Name       string
+ 
+     Path       string
 
      NativeTpl  * template.Template
 }

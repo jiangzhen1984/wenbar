@@ -5,6 +5,7 @@ package gotom
 import (
     "net/http"
     "strconv"
+    "html/template"
 )
 
 
@@ -24,6 +25,15 @@ func (gth GoTomTplHandler) OnHandle(resp http.ResponseWriter, req * http.Request
     tplMapping := GConf.TplMapping[req.URL.Path]
     tpl, da, err := gth(GTResponse{Resp : &resp}, greq, tplMapping)
     if err == nil && tpl != nil {
+        if tpl.NativeTpl == nil || GConf.DebugMode == true {
+            tempTpl, err := template.ParseFiles(tpl.Path) 
+            if err == nil {
+               tpl.NativeTpl = tempTpl
+            }  else {
+                  LE(" Load template %s failed\n", tpl.Path)
+                  return
+            }
+        }
         tpl.NativeTpl.Execute(resp, da)
     }
 }

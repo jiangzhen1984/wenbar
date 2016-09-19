@@ -35,7 +35,7 @@ func PersonalHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.
 
      data := vo.PersonalHtml{Name : user.Name,  Title : user.Title}
 
-     return &gotom.GTTemplate{tpls.Tpls["personal"]}, data, nil
+     return tpls.Tpls["personal"], data, nil
 }
 
 
