@@ -22,16 +22,16 @@
         {{range .TopicList}}
    	<div class="topic">
         <div class="topic_tit">
-           生命科学真的离我们生活很远吗？
+          {{.Title}} <!-- 生命科学真的离我们生活很远吗？ -->
         </div>
         <div class="topic_detail">             
-             <span class="topic_detail_author">刘宏俊 | 中科院北京基因组研究所,遗传学博士              
+             <span class="topic_detail_author">{{.AnsUserName }}<!-- 刘宏俊--> | {{.AnsUserTitle}} 中科院北京基因组研究所,遗传学博士 asdfsdfsp偷偷看
              <div class="topic_detail_left">
              	<img class="topic_detail_photo" src="images/3_10.jpg" align="middle">
                 <span class="topic_detail_words"><p><img class="topic_detail_bg_voice" align="top" src="images/icon_voice_13.png">1元偷偷看1元偷偷看</p></span>
              </div>
        		 <div class="topic_detail_right">
-             看过 2156
+             看过 {{.UserCount}}
     		 </div>  
              <div class="clear"></div>
         </div>    
@@ -42,7 +42,7 @@
  	 <ul>
     	<li><a class="self" href="#">热门</a></li>
         <li><a class="" href="#">发现</a></li>
-        <li><a class="" href="personal.html">我的</a></li>
+        <li><a class="" href="/personal">我的</a></li>
         
     </ul>
 </div>

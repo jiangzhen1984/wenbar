@@ -42,6 +42,11 @@ func LV(level int, format string, v ...interface{}) {
 }
 
 
+func LF() {
+   GoTomLogger.Output(2, "") 
+}
+
+
 func LP(format string, v ...interface{}) {
     if v == nil {
         return

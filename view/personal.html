@@ -14,17 +14,17 @@
 </div>
 <div class="tw_a">
     <div class="tw_b"><img src="images/p8.jpg" /></div>
-	<div class="tw_c">刘宏</div>
-	<div class="tw_d">中科院医学博士</div>
+	<div class="tw_c">{{.Name}}</div>
+	<div class="tw_d">{{.Title}}</div>
 	<div class="tw_wd">
 	    <ul>
 		    <li>2108观看</li>
-			<li>总收入<span>20000</span>元</li>
-			<li>总收益<span>20000</span>元</li>
+			<li>总收入<span>{{.Incoming}}</span>元</li>
+			<li>总收益<span>{{.Revenue}}</span>元</li>
 		</ul>	    
 	</div>
 	<div class="wd_a">
-	    <p>向我提问需要支付100， 可以免费追问</p>
+	    <p>向我提问需要支付{{.Fee}}， 可以免费追问</p>
 		<p>收入90%归你， 按月结算</p>
 	</div>
 </div>
@@ -42,8 +42,8 @@
 </div>
 <div class="bottom">
  	 <ul>
-    	<li><a class="" href="hot_list.html" target="_self">热门</a></li>
-        <li><a class="" href="hot_list.html">发现</a></li>
+    	<li><a class="" href="/hot_list" target="_self">热门</a></li>
+        <li><a class="" href="/hot_list">发现</a></li>
         <li><a class="self" href="#">我的</a></li>
         
     </ul>

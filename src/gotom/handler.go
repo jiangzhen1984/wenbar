@@ -17,7 +17,9 @@ func (gth GoTomTplHandler) OnHandle(resp http.ResponseWriter, req * http.Request
          }
     }
 
-    LI(" request session :%s\n", sess)
+    if sess != nil {
+         LI(" request session :%s ==> %s(%p)\n", sess, gth, gth)
+    }
     greq := &GTRequest{Req : req, sess : sess, Ctx : SerCtx}
     tplMapping := GConf.TplMapping[req.URL.Path]
     tpl, da, err := gth(GTResponse{Resp : &resp}, greq, tplMapping)

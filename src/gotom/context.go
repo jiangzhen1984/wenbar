@@ -38,7 +38,7 @@ type GTSession struct {
 
     Id         uint64
 
-    attrs      map[string]string
+    attrs      map[string]Object
     mu         sync.Mutex
 
     Ctx        *GTServerContext
@@ -51,7 +51,7 @@ type GTRequest struct {
 
     Req        *http.Request
 
-    attrs      map[string]string
+    attrs      map[string]Object
     mu         sync.Mutex
 
     sess       *GTSession
@@ -72,6 +72,9 @@ type Mapping struct {
 
     Hld        GoTomTplHandler
 }
+
+
+type Object interface {}
 
 
 type MappingHandler interface {
@@ -125,11 +128,14 @@ func (ctx * GTServerContext) CreateSession() *GTSession {
     }
 
     sid  := uint64(rand.Int63())
+    LI("new session id %d\n", sid)
     session := &GTSession{Id:sid, attrs:nil} 
     session.Ctx =  SerCtx
     session.valid = true
     
     ctx.sess[sid] = session 
+
+    LI("context create new session %s\n", session)
     return session
 }
 
@@ -235,7 +241,7 @@ func (ctx * GTServerContext) GetMapping(uri string) * Mapping {
 
 
 
-func (sess * GTSession) GetAttribute(key string) string {
+func (sess * GTSession) GetAttribute(key string) (Object) {
 
     if sess == nil {
         LP("Session is null\n")
@@ -248,7 +254,7 @@ func (sess * GTSession) GetAttribute(key string) string {
     return sess.attrs[key]
 }
 
-func (sess * GTSession) SetAttribute(key string, value string) {
+func (sess * GTSession) SetAttribute(key string, value Object) {
 
     if sess == nil {
         LP("Session is null\n")
@@ -257,7 +263,7 @@ func (sess * GTSession) SetAttribute(key string, value string) {
     sess.mu.Lock()
     defer sess.mu.Unlock()
     if sess.attrs == nil {
-         sess.attrs = make(map[string]string)
+         sess.attrs = make(map[string]Object)
     }
 
     sess.attrs[key] = value
@@ -301,7 +307,7 @@ func (sess GTSession) String() string {
      return "(" + strconv.FormatUint(sess.Id, 10) +", "+strconv.FormatBool(sess.valid)+")"
 }
 
-func (req * GTRequest) GetAttribute(key string) string {
+func (req * GTRequest) GetAttribute(key string) (Object) {
     if req.attrs == nil {
          return ""
     }
@@ -309,12 +315,12 @@ func (req * GTRequest) GetAttribute(key string) string {
     return req.attrs[key]
 }
 
-func (req * GTRequest) SetAttribute(key string, value string) {
+func (req * GTRequest) SetAttribute(key string, value Object) {
 
     req.mu.Lock()
     defer req.mu.Unlock()
     if req.attrs == nil {
-         req.attrs = make(map[string]string)
+         req.attrs = make(map[string]Object)
     }
 
     req.attrs[key] = value
@@ -344,12 +350,10 @@ func (req * GTRequest) GetSession() *GTSession {
 func (req * GTRequest) CreateSession(resp GTResponse) *GTSession {
   
      if req.sess != nil {
-         LE(" Session alreay exist %s\n")
-         return req.sess
+          req.sess.Invalidate()
      }
-
- 
      sess := req.Ctx.CreateSession()
+     req.sess = sess
 
      LD("====create session%s\n", sess)
      http.SetCookie(*(resp.Resp), &http.Cookie{Name : GOTOM_SESSION_ID, Value : strconv.FormatUint(sess.Id, 10)})

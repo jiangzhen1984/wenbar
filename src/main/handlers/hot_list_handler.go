@@ -5,18 +5,20 @@ package handlers
 import (
     "gotom"
     "main/vo"
+    "fmt"
 )
 
 
 func HotListHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GTTemplateMapping)  (*gotom.GTTemplate, gotom.Object, error) {
-     gotom.LD("===hotlist   tpls %s\n", tpls)
+     gotom.LF()
 
      if tpls == nil {
-          return nil, nil, nil
+          gotom.LE("No template mapping \n")
+          return nil, nil, fmt.Errorf("No template Mapping")
      }
 
    
-     data := vo.HotListHtml{Title :"sss" , TopicList : []vo.Topic{{Title:"s"},{Title:"s"},{Title:"s"},{Title:"s"},{Title:"s"},{Title:"s"}}}
+     data := vo.HotListHtml{Title :"sss" , TopicList : []vo.TopicHtml{{Title:"s", AnsUserName : " aa", AnsUserTitle :" sss" },{Title:"s"},{Title:"s"},{Title:"s"},{Title:"s"},{Title:"s"}}}
      return &gotom.GTTemplate{tpls.Tpls["hot_list"]}, data, nil
 }
 

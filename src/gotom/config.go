@@ -37,6 +37,4 @@ type GTTemplate struct {
 }
 
 
-type Object interface {}
-
 var GConf * GTConfig
