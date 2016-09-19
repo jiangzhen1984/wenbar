@@ -8,7 +8,7 @@ import (
 )
 
 
-func (gth GoTomHandler) OnHandler(resp http.ResponseWriter, req * http.Request) {
+func (gth GoTomTplHandler) OnHandle(resp http.ResponseWriter, req * http.Request) {
     var sess * GTSession
     cki, err := req.Cookie(GOTOM_SESSION_ID)
     if err == nil && cki != nil {
@@ -19,7 +19,11 @@ func (gth GoTomHandler) OnHandler(resp http.ResponseWriter, req * http.Request) 
 
     LI(" request session :%s\n", sess)
     greq := &GTRequest{Req : req, sess : sess, Ctx : SerCtx}
-    gth(GTResponse{Resp : &resp}, greq)
+    tplMapping := GConf.TplMapping[req.URL.Path]
+    tpl, da, err := gth(GTResponse{Resp : &resp}, greq, tplMapping)
+    if err == nil && tpl != nil {
+        tpl.NativeTpl.Execute(resp, da)
+    }
 }
 
 
@@ -27,7 +31,7 @@ func (gth GoTomHandler) OnHandler(resp http.ResponseWriter, req * http.Request) 
 
 
 
+type GoTomTplHandler func(resp GTResponse, req * GTRequest, tpls * GTTemplateMapping) (*GTTemplate, Object, error)
 
-type GoTomHandler func(resp GTResponse, req * GTRequest)
 
 

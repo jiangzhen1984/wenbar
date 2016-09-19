@@ -70,7 +70,7 @@ type Mapping struct {
 
     Uri        string
 
-    Hld        GoTomHandler
+    Hld        GoTomTplHandler
 }
 
 
@@ -135,7 +135,7 @@ func (ctx * GTServerContext) CreateSession() *GTSession {
 
 
 
-func (ctx * GTServerContext) AddMappingUri(uri string, hdr GoTomHandler) EnumRet {
+func (ctx * GTServerContext) AddMappingUri(uri string, hdr GoTomTplHandler) EnumRet {
 
     if ctx == nil {
         LP("Conext doesn't initalize\n")
@@ -198,7 +198,7 @@ func (ctx * GTServerContext) RemoveMapping(uri string) {
     delete(ctx.mapping, uri)
 }
 
-func (ctx * GTServerContext) UpdateMapping(uri string, hdr  GoTomHandler) {
+func (ctx * GTServerContext) UpdateMapping(uri string, hdr  GoTomTplHandler) {
 
     if ctx == nil {
         LP("Conext doesn't initalize\n")

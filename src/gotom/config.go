@@ -26,7 +26,7 @@ type GTTemplateMapping struct {
 
      Uri         string
 
-     Tpls        map[string]*template.Template    
+     Tpls        map[string]*template.Template
 }
 
 

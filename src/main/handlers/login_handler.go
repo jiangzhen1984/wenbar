@@ -5,23 +5,21 @@ package handlers
 
 import (
     "gotom"
-    "html/template"
-    "main/vo"
+    "net/http"
+    "fmt"
 )
 
 
-func LoginHandler(resp gotom.GTResponse, req * gotom.GTRequest) {
+func LoginHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GTTemplateMapping)  (*gotom.GTTemplate, gotom.Object, error) {
 
-     t, err := template.ParseFiles("./view/hot_list.html")
-     gotom.LE(" parse hot list file err:%s\n", err)
-     if err != nil {
-            gotom.LE(" parse hot list file err:%s\n", err)
-            return
+     if req.Req.Method == "GET" {
+         return &gotom.GTTemplate{tpls.Tpls["login"]}, nil, nil
+     } else if req.Req.Method == "POST" {
+         http.Redirect(*resp.Resp, req.Req, "/hot_list", 301) 
+         return nil, nil, nil
      }
-
-     data := vo.HotListHtml{Title :"sss" , TopicList : []vo.Topic{{Title:"s"},{Title:"s"},{Title:"s"}}}
-     t.Execute(*resp.Resp, data)
-     gotom.LD("=====output  \n")
+    
+     return nil, nil, fmt.Errorf("Not support method %s", req.Req.Method)
 }
 
 

@@ -62,7 +62,7 @@ func InitServer(conf * GTConfig) {
    LI(" Server Config :%s\n", conf)
    http.Handle("/", http.FileServer(http.Dir(conf.Tpldir)))
    for key, value := range SerCtx.mapping {
-        http.HandleFunc(key, value.Hld.OnHandler)
+        http.HandleFunc(key, value.Hld.OnHandle)
    }
 
    GConf = conf
