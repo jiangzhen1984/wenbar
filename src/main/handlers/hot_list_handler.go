@@ -18,7 +18,7 @@ func HotListHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.G
      }
 
    
-     data := vo.HotListHtml{Title :"sss" , TopicList : []vo.TopicHtml{{Title:"s", AnsUserName : " aa", AnsUserTitle :" sss" },{Title:"s"},{Title:"s"},{Title:"s"},{Title:"s"},{Title:"s"}}}
+     data := vo.HotListHtml{Title :"sss" , TopicList : []vo.TopicHtml{{Title:"s", AnsUserName : " aa", AnsUserTitle :" 院北京基因组研究所,遗传学博士 asdfsdfsp偷偷看" },{Title:"s"},{Title:"s"},{Title:"s"},{Title:"s"},{Title:"s"}}}
      return tpls.Tpls["hot_list"], data, nil
 }
 

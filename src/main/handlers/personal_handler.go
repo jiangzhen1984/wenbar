@@ -13,7 +13,6 @@ import (
 
 func PersonalHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GTTemplateMapping)  (*gotom.GTTemplate, gotom.Object, error) {
 
-     gotom.LD("=============>")
      sess := req.GetSession()
      if sess == nil || sess.GetAttribute("user") == nil {
          gotom.LE("====  not login session  %s  \n", sess)
