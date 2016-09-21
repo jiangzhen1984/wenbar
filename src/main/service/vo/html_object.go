@@ -18,7 +18,7 @@ type HotListHtml struct {
 
 
 type TopicHtml struct {
-     Tid           uint32
+     Tid           Wid
      Title         string
      AnsUserName   string
      AnsUserTitle  string

@@ -4,17 +4,26 @@ package vo
 
 
 import (
-
+    "time"
 )
 
 
 
 type Topic struct {
 
-     Id        uint64
+     Id        Wid
      Title     string 
      Price     float32
      Count     uint32
+     Date      time.Time
+     Creator   *User
+     AnsList   []*Answer       
+}
 
-     AnsUser   *User
+
+type Answer struct {
+
+    Id        Wid
+    Date      time.Time
+    AnsUser   *User
 }

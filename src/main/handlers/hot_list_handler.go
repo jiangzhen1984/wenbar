@@ -3,10 +3,14 @@
 package handlers
 
 import (
+    "time"
     "gotom"
     "main/service/vo"
-    "fmt"
+    "main/service"
 )
+
+
+const DEFAULT_FETCH_SIZE = 20
 
 
 func HotListHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GTTemplateMapping)  (*gotom.GTTemplate, gotom.Object, error) {
@@ -14,11 +18,20 @@ func HotListHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.G
 
      if tpls == nil {
           gotom.LE("No template mapping \n")
-          return nil, nil, fmt.Errorf("No template Mapping")
+          return nil, nil, gotom.ErrorMsg("No template Mapping")
      }
 
-   
-     data := vo.HotListHtml{Title :"sss" , TopicList : []vo.TopicHtml{{Tid  : 1, Title:"s", AnsUserName : " aa", AnsUserTitle :" 院北京基因组研究所,遗传学博士 asdfsdfsp偷偷看" },{Title:"s"},{Title:"s"},{Title:"s"},{Title:"s"},{Title:"s"}}}
+     ti  := gotom.Object(time.Now())
+     fs  := gotom.Object(DEFAULT_FETCH_SIZE)
+     gdata := ws.DoService(ws.GetHotList, &ti, &fs)
+     topiclist := (*gdata).([]*vo.Topic)
+     
+     data := new(vo.HotListHtml)   
+     data.TopicList = make([]vo.TopicHtml, 0, len(topiclist))
+     for _, val := range topiclist {
+          data.TopicList = append(data.TopicList, vo.TopicHtml{Tid : val.Id, Title : val.Title})
+     }
+    
      return tpls.Tpls["hot_list"], data, nil
 }
 

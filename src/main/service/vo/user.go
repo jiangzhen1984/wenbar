@@ -4,7 +4,7 @@ package vo
 
 type User struct {
 
-     Uid       uint32
+     Uid       Wid
      
      Name      string 
 

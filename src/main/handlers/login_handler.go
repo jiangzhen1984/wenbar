@@ -8,7 +8,6 @@ import (
     "net/http"
     "fmt"
     "main/service/vo"
-    "main/service"
 )
 
 
@@ -17,14 +16,10 @@ func LoginHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GTT
      if req.Req.Method == "GET" {
          return tpls.Tpls["login"], nil, nil
      } else if req.Req.Method == "POST" {
-         ws.DoService(ws.GetUserWS)
-         if req.Req.FormValue("phoneNumber") == "13811962467" {
-              sess := req.CreateSession(resp)
-              sess.SetAttribute("user", &vo.User{Name : "test", Title :"test"})
-              http.Redirect(*resp.Resp, req.Req, "/hot_list", 301) 
-         } else {
-                return tpls.Tpls["login"], vo.LoginHtml{ PhoneNumber: "1ee", ErrMsg : "error" }, nil
-         }
+         //TODO update for wexin auth
+         sess := req.CreateSession(resp)
+         sess.SetAttribute("user", &vo.User{Name : "test", Title :"test"})
+         http.Redirect(*resp.Resp, req.Req, "/hot_list", 301) 
      } else {
          http.Redirect(*resp.Resp, req.Req, "/hot_list", 301) 
          return nil, nil, nil

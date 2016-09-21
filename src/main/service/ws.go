@@ -60,7 +60,6 @@ func CloseDBSession(dbs * DBSession) {
      if !ok {
           panic("==== dbs.db cast failed\n")
      }
-     gotom.LD("===%s\n", msess)
      msess.Close()
 }
 
@@ -76,10 +75,12 @@ type WSServiceFunc func(ds * DBSession, o ...*gotom.Object) (*gotom.Object)
 
 func DoService(wf WSServiceFunc, o ...*gotom.Object) * gotom.Object {
       gotom.LF()
+      gotom.LI("====> %s\n", wf)
+      gotom.LI("====> %s\n", o)
       sess := CreateDBSession() 
       gobject := wf(sess, o...)
       CloseDBSession(sess)
-      gotom.LF()
+      gotom.LI("====> %s  finish\n", wf)
       return gobject
 }
 
