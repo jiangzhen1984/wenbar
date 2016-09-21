@@ -7,6 +7,7 @@ import (
     "log"
     "os"
     "fmt"
+    "errors"
 )
 
 const (
@@ -52,6 +53,11 @@ func LP(format string, v ...interface{}) {
         return
     }
     GoTomLogger.Panicf(format, v...)
+}
+
+
+func ErrorMsg(format string, a ...interface{}) error {
+    return errors.New(fmt.Sprintf(format, a...))
 }
 
 

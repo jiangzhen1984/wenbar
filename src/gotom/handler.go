@@ -23,7 +23,10 @@ func (gth GoTomTplHandler) OnHandle(resp http.ResponseWriter, req * http.Request
     }
     greq := &GTRequest{Req : req, sess : sess, Ctx : SerCtx}
     tplMapping := GConf.TplMapping[req.URL.Path]
+
+    LI("====>%s\n", gth)
     tpl, da, err := gth(GTResponse{Resp : &resp}, greq, tplMapping)
+    LI("====>%s  finish\n", gth)
     if err == nil && tpl != nil {
         if tpl.NativeTpl == nil || GConf.DebugMode == true {
             tempTpl, err := template.ParseFiles(tpl.Path) 
