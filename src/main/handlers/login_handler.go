@@ -6,7 +6,6 @@ package handlers
 import (
     "gotom"
     "net/http"
-    "fmt"
     "main/service/vo"
 )
 
@@ -25,7 +24,7 @@ func LoginHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GTT
          return nil, nil, nil
      }
     
-     return nil, nil, fmt.Errorf("Not support method %s", req.Req.Method)
+     return nil, nil, gotom.ErrorMsg("Not support method %s", req.Req.Method)
 }
 
 

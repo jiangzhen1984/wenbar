@@ -362,3 +362,9 @@ func (req * GTRequest) CreateSession(resp GTResponse) *GTSession {
 }
 
 
+
+func (mp Mapping) String() string {
+     return "[URI : " + mp.Uri +" Func  +]" 
+}
+
+

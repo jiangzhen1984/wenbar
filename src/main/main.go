@@ -29,6 +29,7 @@ var conf *gotom.GTConfig = &gotom.GTConfig {
                            {"/logout",        handlers.LogoutHandler},
                            {"/my_inquiry",    handlers.MyInquiryHandler},
                            {"/question",      handlers.QuestionDetailHandler},
+                           {"/inquiry",       handlers.InquiryHandler},
                       },
      TplMapping     : map[string]*gotom.GTTemplateMapping {
                            "/hot_list"    : {
@@ -59,6 +60,12 @@ var conf *gotom.GTConfig = &gotom.GTConfig {
                                                 Uri  : "/question",
                                                 Tpls : map[string]*gotom.GTTemplate{
                                                         "questiondetail" : {Name : "questiondetail"  , Path : "view/question_detail.html"},
+                                                        },
+                                            }  ,
+                           "/inquiry"    : {
+                                                Uri  : "/inquiry",
+                                                Tpls : map[string]*gotom.GTTemplate{
+                                                        "inquiry" : {Name : "inquiry"  , Path : "view/inquire.html"},
                                                         },
                                             }  ,
                       },

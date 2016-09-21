@@ -46,7 +46,7 @@ func InitDB(dbc DBConfiguration) {
      } 
 
      localGlobalSession = sess
-     gotom.LD("=====%s sess create \n", localGlobalSession)
+     gotom.LD(" Initial DB Session successfully ==>%p \n", localGlobalSession)
 }
 
 
