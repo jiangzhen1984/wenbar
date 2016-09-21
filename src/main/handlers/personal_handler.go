@@ -7,7 +7,7 @@ package handlers
 import (
     "gotom"
     "net/http"
-    "main/vo"
+    "main/service/vo"
 )
 
 

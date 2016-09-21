@@ -5,6 +5,7 @@ package main
 import (
     "gotom"
     "main/handlers"
+    "main/service"
 )
 
 
@@ -65,5 +66,6 @@ var conf *gotom.GTConfig = &gotom.GTConfig {
 
 
 func main() {
+    ws.InitDB(ws.DBConfiguration{DBUrl:"localhost"})
     gotom.InitServer(conf)
 }

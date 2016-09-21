@@ -4,7 +4,7 @@ package handlers
 
 import (
     "gotom"
-    "main/vo"
+    "main/service/vo"
     "fmt"
 )
 
