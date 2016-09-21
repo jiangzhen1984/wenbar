@@ -19,20 +19,18 @@ func (dm DefaultMapping) OnHandle(resp GTResponse, req * GTRequest) {
 
 
 
-func stest(resp GTResponse, req * GTRequest) {
-}
 
 
 
 
 
 func TestAddMappingUri(t *testing.T) {
-   SerCtx.AddMappingUri("/tst", stest)
+   SerCtx.AddMappingUri("/tst", nil)
 
    mp := SerCtx.GetMapping("/tst")
 
    t.Logf("====>%s", mp)
-   if mp == nil  || mp.uri != "/tst" || mp.hld == nil {
+   if mp == nil  || mp.Uri != "/tst" || mp.Hld == nil {
       t.FailNow()
    }
 
@@ -47,11 +45,11 @@ func TestCreateSession(t * testing.T) {
 
   sess := SerCtx.CreateSession()
 
-  if sess == nil || sess.id <= 0 {
+  if sess == nil || sess.Id <= 0 {
       t.Fatal("create session failed")
   }
 
-  sess = SerCtx.GetSession(sess.id)
+  sess = SerCtx.GetSession(sess.Id)
 
   if sess == nil {
       t.Fatal("get session")

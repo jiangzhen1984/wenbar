@@ -29,13 +29,13 @@ LP("ssss")
     mappings := make([]*Mapping, 10, 10)
 
     for idx := 0 ; idx < cap(mappings); idx++ {
-         mappings[idx] = &Mapping{uri:"/test" + strconv.FormatInt(int64(idx), 10)}
+         mappings[idx] = &Mapping{Uri:"/test" + strconv.FormatInt(int64(idx), 10)}
     } 
     
     InitMappings(mappings)
 
     for _, mp := range mappings {
-        tmp := SerCtx.GetMapping(mp.uri)
+        tmp := SerCtx.GetMapping(mp.Uri)
         if tmp == nil {
               t.Fatal(" failed at %s\n", mp)
         }
@@ -55,7 +55,7 @@ func TestInitServer(t * testing.T) {
     mappings := make([]*Mapping, 10, 10)
 
     for idx := 0 ; idx < cap(mappings); idx++ {
-         mappings[idx] = &Mapping{uri:"/test" + strconv.FormatInt(int64(idx), 10), hld : testOnHandler}
+         mappings[idx] = &Mapping{Uri:"/test" + strconv.FormatInt(int64(idx), 10), Hld : nil}
     } 
     
     InitMappings(mappings)
