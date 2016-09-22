@@ -43,7 +43,7 @@ func InitMappings(mappings []*Mapping) {
     var ret EnumRet
     for _ , mp := range mappings {
         ret = SerCtx.AddMapping(mp) 
-        LD("====> Add Mapping ret %d Mapping:%s\n", ret, *mp)
+        LD("====> Add Mapping ret %d Mapping:%s\n", ret, mp)
     }
 }
 

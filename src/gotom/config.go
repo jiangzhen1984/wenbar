@@ -6,6 +6,7 @@ package gotom
 import (
      "html/template"
      "strconv"
+     "fmt"
 )
 
 type GTConfig struct {
@@ -51,7 +52,14 @@ func (gt GTConfig) String() string {
      buf += "      Port: " + gt.Port+"\n"
      buf += "      Mappings:\n"
      for _, val := range gt.Mapping {
-         buf += "          uri:" + val.Uri + "   func:" + val.String() +"\n"
+         s := fmt.Sprintf("uri: %s  func: %p", val.Uri, val.Hld)
+         buf += "          " + s + "\n"
+     }
+
+     buf += "      Templates:\n"
+     for _, val := range gt.TplMapping {
+         s := fmt.Sprintf("uri: %s  tpls: %s", val.Uri, val.Tpls)
+         buf += "          " + s + "\n"
      }
      return buf
 }

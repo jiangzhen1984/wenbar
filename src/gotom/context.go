@@ -7,6 +7,7 @@ import (
     "sync"
     "math/rand"
     "strconv"
+    "fmt"
 )
 
 
@@ -364,7 +365,7 @@ func (req * GTRequest) CreateSession(resp GTResponse) *GTSession {
 
 
 func (mp Mapping) String() string {
-     return "[URI : " + mp.Uri +" Func  +]" 
+     return fmt.Sprintf("[URI : %s  Func  %p]", mp.Uri, mp.Hld) 
 }
 
 
