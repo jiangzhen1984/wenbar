@@ -14,7 +14,10 @@ type User struct {
   
      Avatar2   string
 
-   
+     NativeId  uint64
+
+     OutId     string
+
      Personal  *UserPersonal
 }
 
@@ -28,3 +31,6 @@ type UserPersonal struct {
 
      QuesFee      float32 
 }
+
+
+

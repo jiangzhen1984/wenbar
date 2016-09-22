@@ -20,12 +20,24 @@ type HotListHtml struct {
 type TopicHtml struct {
      Tid           Wid
      Title         string
-     AnsUserName   string
-     AnsUserTitle  string
+     Content       string
      UserCount     uint32
      ErrMsg        string
+     CreatorName   string
+     CreatorTitle  string
+     CreatorId     string
+     AnsList       []TopicAnswerList
+     Date          string
+     RecCount      uint32
+     Price        float32
 }
 
+
+type TopicAnswerList struct {
+     AnsUserName  string
+     AnsUserTitle string
+     Ans          string 
+}
 
 type LoginHtml struct {
 

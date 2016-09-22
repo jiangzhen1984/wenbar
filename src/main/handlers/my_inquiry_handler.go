@@ -5,8 +5,9 @@ package handlers
 
 import (
     "gotom"
+    "main/service"
     "main/service/vo"
-    "fmt"
+    "time"
 )
 
 
@@ -15,11 +16,32 @@ func MyInquiryHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom
 
      if tpls == nil {
           gotom.LE("No template mapping \n")
-          return nil, nil, fmt.Errorf("No template Mapping")
+          return nil, nil, gotom.ErrorMsg("No template Mapping")
      }
 
-   
-     data := vo.MyInquiryHtml{TopicList : []vo.TopicHtml{{Title:"s", AnsUserName : " aa", AnsUserTitle :" 院北京基因组研究所,遗传学博士 asdfsdfsp偷偷看" },{Title:"s"},{Title:"s"},{Title:"s"},{Title:"s"},{Title:"s"},{Title:"s"},{Title:"s"},{Title:"s"},{Title:"s"},{Title:"s"}}}
+     user := GetLoggedUser(req)
+     if user == nil {
+          Redirect(resp, req, "/login")
+          return nil, nil, nil 
+     }
+     gotype := gotom.Object(ws.QUESTION_QUERY)
+     gotime := gotom.Object(time.Now())
+     gonativeId := gotom.Object(user.NativeId)
+     gdata, err := ws.DoService(ws.GetPersonalTopicList, &gotype, &gotime, &gonativeId)
+
+     if err != nil {
+           ///TODO  check error for query
+           gotom.LE("===>%s\n", err)
+     }
+     topiclist := (*gdata).([]*vo.Topic)
+     
+     gotom.LD("====>%d  \n", len(topiclist))
+     data := new(vo.HotListHtml)   
+     data.TopicList = make([]vo.TopicHtml, 0, len(topiclist))
+     for _, val := range topiclist {
+          data.TopicList = append(data.TopicList, vo.TopicHtml{Tid : val.Id, Title : val.Title})
+     }
+     
      return tpls.Tpls["myinquiry"], data, nil
 }
 

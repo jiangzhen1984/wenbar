@@ -12,18 +12,9 @@ import (
 
 func PersonalHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GTTemplateMapping)  (*gotom.GTTemplate, gotom.Object, error) {
 
-     sess := req.GetSession()
-     if sess == nil || sess.GetAttribute("user") == nil {
-         gotom.LE("====  not login session  %s  \n", sess)
-         Redirect(resp, req, "/login")
-         return nil, nil, nil
-     }
-
-     obj := sess.GetAttribute("user")
-     user, ok := obj.(*vo.User)
-     if ok == false {
-         gotom.LE("==== type mismatch %s  \n", user)
-         Redirect(resp, req, "/login") 
+     user := GetLoggedUser(req)
+     if user == nil {
+         Redirect(resp, req, "/login?from=/personal")
          return nil, nil, nil
      }
 

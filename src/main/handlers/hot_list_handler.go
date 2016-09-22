@@ -32,6 +32,7 @@ func HotListHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.G
      data := new(vo.HotListHtml)   
      data.TopicList = make([]vo.TopicHtml, 0, len(topiclist))
      for _, val := range topiclist {
+          gotom.LD("======>%s\n", val.Id)
           data.TopicList = append(data.TopicList, vo.TopicHtml{Tid : val.Id, Title : val.Title})
      }
     
