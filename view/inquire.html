@@ -3,7 +3,7 @@
 <head>
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>ÌáÎÊ</title>
+<title>发出询问</title>
 <link href="css/css.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -22,11 +22,13 @@
 	</div>
 </div>
 <div class="tw_f">
+    <form action="/inquiry" method="POST">
     <div class="zw"></div>
-    <textarea onKeyDown="textdown(event)" onKeyUp="textup()" placeholder="请输入您所关心的问题"></textarea>
+    <textarea name="content" onKeyDown="textdown(event)" onKeyUp="textup()" placeholder="请输入您所关心的问题"></textarea>
 	<label><input name="Fruit" type="checkbox" value="" /></label>
 	<p>£€100</p>
-	<input type="submit" value="ÐŽºÃÁË" class="submit"> 
+	<input type="submit" value="提交" class="submit"> 
+     </form>
 </div>
 </body>
 </html>

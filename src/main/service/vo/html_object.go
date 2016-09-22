@@ -23,6 +23,7 @@ type TopicHtml struct {
      AnsUserName   string
      AnsUserTitle  string
      UserCount     uint32
+     ErrMsg        string
 }
 
 
@@ -30,6 +31,7 @@ type LoginHtml struct {
 
     PhoneNumber string
     ErrMsg      string
+    From        string
 }
 
 

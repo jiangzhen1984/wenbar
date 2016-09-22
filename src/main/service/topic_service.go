@@ -6,6 +6,7 @@ import (
      "gotom"
      "main/service/vo"
      "time"
+     "gopkg.in/mgo.v2/bson"
 )
 
 
@@ -14,7 +15,7 @@ type TopicList struct {
      TL  []*vo.Topic
 }
 
-func GetHotList(dbs * DBSession, p ...*gotom.Object) *gotom.Object {
+func GetHotList(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
      var topicList []*vo.Topic
      var ptime time.Time
   
@@ -29,19 +30,34 @@ func GetHotList(dbs * DBSession, p ...*gotom.Object) *gotom.Object {
      }
      gotom.LD("===%s\n", ptime)
      
-     topicList = make([]*vo.Topic, 0, 10)
-     for i :=0; i < 20; i++ {
-          topicList = append(topicList, &vo.Topic{Id :"1", Title : "sss"})
-     }
-     
+     sess := dbs.GetMongoSession()
+     qr := sess.DB("test1").C("topic").Find(bson.M{"date": bson.M{"$lte" : time.Now()}}).Limit(20).All(&topicList)
+
+     gotom.LD("=== topic len :%d   %s\n", len(topicList), qr)
      gobj := gotom.Object(topicList)
-     return &gobj
+     return &gobj, nil
 }
 
 
-func SearchTopic(dbs * DBSession, p ...*gotom.Object) *gotom.Object{
+func SearchTopic(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
      var topicList []*vo.Topic
 
      gobj := gotom.Object(topicList)
-     return &gobj
+     return &gobj, nil
+}
+
+
+
+func CreateTopic(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
+     sess := dbs.GetMongoSession()      
+     
+     ti, ok := (*p[0]).(vo.Topic)
+     if ok == true {
+          ti.Date = time.Now()
+          err := sess.DB("test1").C("topic").Insert(&ti)
+          gotom.LD("===create result:%s\n", err)
+          gotom.LD("===create result:%s\n", ti)
+          return p[0],nil
+     }
+     return nil, gotom.ErrorMsg(" paramter is no vo.Topic")
 }

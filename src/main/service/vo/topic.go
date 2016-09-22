@@ -13,6 +13,7 @@ type Topic struct {
 
      Id        Wid
      Title     string 
+     Content   string
      Price     float32
      Count     uint32
      Date      time.Time

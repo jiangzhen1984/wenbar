@@ -23,9 +23,12 @@ func HotListHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.G
 
      ti  := gotom.Object(time.Now())
      fs  := gotom.Object(DEFAULT_FETCH_SIZE)
-     gdata := ws.DoService(ws.GetHotList, &ti, &fs)
+     gdata, err := ws.DoService(ws.GetHotList, &ti, &fs)
+     if err != nil {
+     }
      topiclist := (*gdata).([]*vo.Topic)
      
+     gotom.LD("====>%d  \n", len(topiclist))
      data := new(vo.HotListHtml)   
      data.TopicList = make([]vo.TopicHtml, 0, len(topiclist))
      for _, val := range topiclist {

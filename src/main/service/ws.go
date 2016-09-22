@@ -29,6 +29,16 @@ type DBConfiguration struct {
 
 
 func (dbs * DBSession) Close() {
+     CloseDBSession(dbs)
+}
+
+
+func (dbs * DBSession) GetMongoSession() *mgo.Session {
+     msess, ok := dbs.db.(*mgo.Session)
+     if !ok {
+          panic("==== dbs.db cast failed\n")
+     }
+     return msess
 }
 
 
@@ -70,18 +80,19 @@ type WService func(o ...*gotom.Object)  (* gotom.Object)
 
 
 
-type WSServiceFunc func(ds * DBSession, o ...*gotom.Object) (*gotom.Object)
+type WSServiceFunc func(ds * DBSession, o ...*gotom.Object) (*gotom.Object, error)
 
 
-func DoService(wf WSServiceFunc, o ...*gotom.Object) * gotom.Object {
+func DoService(wf WSServiceFunc, o ...*gotom.Object) (* gotom.Object, error) {
       gotom.LF()
       gotom.LI("====> %s\n", wf)
       gotom.LI("====> %s\n", o)
       sess := CreateDBSession() 
-      gobject := wf(sess, o...)
+      gobject, err := wf(sess, o...)
       CloseDBSession(sess)
-      gotom.LI("====> %s  finish\n", wf)
-      return gobject
+      gotom.LI("<==== %s err :%s \n", wf, err)
+      
+      return gobject, err
 }
 
 

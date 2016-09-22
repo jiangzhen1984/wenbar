@@ -3,7 +3,6 @@ package handlers
 
 import (
     "gotom"
-    "net/http"
 )
 
 
@@ -14,7 +13,7 @@ func LogoutHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GT
           sess.Invalidate()
      }
 
-     http.Redirect(*resp.Resp, req.Req, "/login", 302) 
+     Redirect(resp, req, "/login") 
      return nil, nil, nil
 }
 

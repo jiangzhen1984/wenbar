@@ -6,7 +6,8 @@ package handlers
 
 import (
     "gotom"
-    "net/http"
+    "main/service"
+    "main/service/vo"
 )
 
 
@@ -15,10 +16,23 @@ func InquiryHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.G
      if req.Req.Method == "GET" {
          return tpls.Tpls["inquiry"], nil, nil
      } else if req.Req.Method == "POST" {
-         http.Redirect(*resp.Resp, req.Req, "/my_inquiry", 301) 
-     } else {
-         http.Redirect(*resp.Resp, req.Req, "/hot_list", 301) 
-         return nil, nil, nil
+         if UserLoginCheck(req) != true {
+              Redirect(resp, req, "/login?from=/inquiry") 
+              return nil, nil, nil
+         } else {
+             //TODO save inquiry
+             con := req.Req.FormValue("content")
+             if len(con) <= 0 {
+                  return tpls.Tpls["inquiry"], vo.TopicHtml{ErrMsg : "请输入问题内容"}, nil
+             }
+              
+             gtopic  := gotom.Object(vo.Topic{Title:"sss", Content:con})
+             _, err := ws.DoService(ws.CreateTopic, &gtopic) 
+             if err != nil {
+                  return tpls.Tpls["inquiry"], vo.TopicHtml{ErrMsg : "提交问题失败"}, nil
+             }
+             Redirect(resp, req, "/my_inquiry") 
+         }
      }
     
      return nil, nil, gotom.ErrorMsg("Not support method %s", req.Req.Method)

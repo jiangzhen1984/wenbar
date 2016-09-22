@@ -6,7 +6,6 @@ package handlers
 
 import (
     "gotom"
-    "net/http"
     "main/service/vo"
 )
 
@@ -16,7 +15,7 @@ func PersonalHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.
      sess := req.GetSession()
      if sess == nil || sess.GetAttribute("user") == nil {
          gotom.LE("====  not login session  %s  \n", sess)
-         http.Redirect(*resp.Resp, req.Req, "/login", 302) 
+         Redirect(resp, req, "/login")
          return nil, nil, nil
      }
 
@@ -24,7 +23,7 @@ func PersonalHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.
      user, ok := obj.(*vo.User)
      if ok == false {
          gotom.LE("==== type mismatch %s  \n", user)
-         http.Redirect(*resp.Resp, req.Req, "/login", 302) 
+         Redirect(resp, req, "/login") 
          return nil, nil, nil
      }
 
