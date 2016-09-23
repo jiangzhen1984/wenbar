@@ -3,6 +3,7 @@
 package vo
 
 import (
+    "gotom"
 )
 
 
@@ -44,6 +45,8 @@ func (th * TopicHtml) PopulateTopic(val *Topic) {
      th.CreatorTitle = val.Creator.Title
      th.CreatorId    = val.Creator.GetNativeID()
      th.UserCount    = val.Count
+     th.Date         = val.GetElapsedTime()
+     gotom.LD("=====%s\n", th.Date)
 }
 
 

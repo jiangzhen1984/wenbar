@@ -90,12 +90,14 @@ func CreateTopic(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
 
 const (
    QUESTION_QUERY  = iota
-   ANSWER_QUEY  
+   ANSWER_QUERY  
+   VIEWED_QUERY
 )
 
 func GetPersonalTopicList(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
      var topicList []*vo.Topic
      var err error
+     var result []struct{ TopicId string `bson:"topicid"` }
 
      if p == nil || len(p) < 3 {
           return nil, gotom.ErrorMsg("Parameter failed")
@@ -112,7 +114,7 @@ func GetPersonalTopicList(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, e
           ti = time.Now()
      }
   
-     tid, ok := (*p[2]).(uint64)
+     tid, ok := (*p[2]).(vo.Wid)
      if ok ==  false {
           gotom.LD("query type error %s\n", p[2])
           return nil, gotom.ErrorMsg("Type not support")
@@ -121,8 +123,23 @@ func GetPersonalTopicList(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, e
      sess := dbs.GetMongoSession()
      switch ty {
           case QUESTION_QUERY:
-          gotom.LD("own question query ==>%s ==%d\n", ti, 1)
-          err = sess.DB("test1").C("topic").Find(bson.M{"date": bson.M{"$lte" : ti}, "creator.nativeid" : tid}).Sort("-date").Limit(20).All(&topicList)
+              gotom.LD("own question query ==>%s\n", ti)
+              err = sess.DB("test1").C("topic").Find(bson.M{"date": bson.M{"$lte" : ti}, "creator.uid" : tid}).Sort("-date").Limit(20).All(&topicList)
+          case VIEWED_QUERY:
+              gotom.LD("my viewed query ==>%s\n", tid)
+              query := bson.M{"date": bson.M{"$lte" : ti}, "viewuserid" : tid}
+              project := bson.M{"topicid" : 1}
+              err := sess.DB("test1").C("view_topic").Find(query).Sort("-date").Limit(20).Select(project).All(&result)
+              idlist := []string{}
+              if err != nil {
+              }
+              for _, val := range result {
+                   idlist = append(idlist, val.TopicId)
+              }
+              gotom.LD("====%s    %s\n", err, idlist)
+
+              err = sess.DB("test1").C("topic").Find(bson.M{"_id" : bson.M{"$in" : idlist}}).All(&topicList)
+              
      }
 
      gotom.LD("=== topic len :%d   %s\n", len(topicList), err)
@@ -183,7 +200,9 @@ func  RecordTopicViewUser(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, e
            gotom.LP("==== convert failed %s  \n", *p[0])
      }
    
-     vt.Date = time.Now()
+     vt.Date       = time.Now()
+     vt.TopicId    = vt.Topic.Id
+     vt.ViewUserId = vt.ViewUser.Uid
      sess := dbs.GetMongoSession()
      sess.DB("test1").C("view_topic").Insert(vt)
     

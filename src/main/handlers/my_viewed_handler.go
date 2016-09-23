@@ -11,7 +11,7 @@ import (
 )
 
 
-func MyInquiryHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GTTemplateMapping)  (*gotom.GTTemplate, gotom.Object, error) {
+func MyViewedHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GTTemplateMapping)  (*gotom.GTTemplate, gotom.Object, error) {
      gotom.LF()
 
      if tpls == nil {
@@ -21,10 +21,10 @@ func MyInquiryHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom
 
      user := GetLoggedUser(req)
      if user == nil {
-          Redirect(resp, req, "/login")
+          Redirect(resp, req, "/login?from=/my_viewed")
           return nil, nil, nil 
      }
-     gotype := gotom.Object(ws.QUESTION_QUERY)
+     gotype := gotom.Object(ws.VIEWED_QUERY)
      gotime := gotom.Object(time.Now())
      gonativeId := gotom.Object(user.Uid)
      gdata, err := ws.DoService(ws.GetPersonalTopicList, &gotype, &gotime, &gonativeId)
@@ -39,10 +39,12 @@ func MyInquiryHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom
      data := new(vo.HotListHtml)   
      data.TopicList = make([]vo.TopicHtml, 0, len(topiclist))
      for _, val := range topiclist {
-          data.TopicList = append(data.TopicList, vo.TopicHtml{Tid : val.Id, Title : val.Title})
+          th := vo.TopicHtml{}
+          th.PopulateTopic(val) 
+          data.TopicList = append(data.TopicList, th)
      }
      
-     return tpls.Tpls["myinquiry"], data, nil
+     return tpls.Tpls["myviewed"], data, nil
 }
 
 
