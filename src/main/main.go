@@ -24,6 +24,7 @@ var conf *gotom.GTConfig = &gotom.GTConfig {
      Tpldir         : "./view/",
      Mapping        : []*gotom.Mapping {
                            {"/hot_list",      handlers.HotListHandler},
+                           {"/newest_list",   handlers.NewestListHandler},
                            {"/login",         handlers.LoginHandler},
                            {"/personal",      handlers.PersonalHandler},
                            {"/logout",        handlers.LogoutHandler},
@@ -36,6 +37,12 @@ var conf *gotom.GTConfig = &gotom.GTConfig {
                                              Uri  : "/hot_list",
                                              Tpls : map[string]*gotom.GTTemplate{
                                                         "hot_list" : {Name : "hot_list" , Path : "view/hot_list.html"},
+                                                    },
+                                            }  ,
+                           "/newest_list" : {
+                                             Uri  : "/newest_list",
+                                             Tpls : map[string]*gotom.GTTemplate{
+                                                        "newest_list" : {Name : "newest_list" , Path : "view/newest_list.html"},
                                                     },
                                             }  ,
                            "/login"       : {

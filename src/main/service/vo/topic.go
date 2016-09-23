@@ -5,13 +5,14 @@ package vo
 
 import (
     "time"
+    "strconv"
 )
 
 
 
 type Topic struct {
 
-     Id        Wid
+     Id        Wid      `json:"id" bson:"_id,omitempty"`
      Title     string 
      Content   string
      Price     float32
@@ -19,6 +20,11 @@ type Topic struct {
      Date      time.Time
      Creator   *User
      AnsList   []*Answer       
+}
+
+
+func (t Topic) GetCount() string {
+     return strconv.FormatUint(uint64(t.Count), 10)
 }
 
 

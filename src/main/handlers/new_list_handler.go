@@ -10,9 +10,7 @@ import (
 )
 
 
-
-
-func HotListHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GTTemplateMapping)  (*gotom.GTTemplate, gotom.Object, error) {
+func NewestListHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GTTemplateMapping)  (*gotom.GTTemplate, gotom.Object, error) {
      gotom.LF()
 
      if tpls == nil {
@@ -22,7 +20,7 @@ func HotListHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.G
 
      ti  := gotom.Object(time.Now())
      fs  := gotom.Object(DEFAULT_FETCH_SIZE)
-     gdata, err := ws.DoService(ws.GetHotList, &ti, &fs)
+     gdata, err := ws.DoService(ws.GetNewestList, &ti, &fs)
      if err != nil {
      }
      topiclist := (*gdata).([]*vo.Topic)
@@ -37,7 +35,7 @@ func HotListHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.G
           data.TopicList = append(data.TopicList, vth)
      }
     
-     return tpls.Tpls["hot_list"], data, nil
+     return tpls.Tpls["newest_list"], data, nil
 }
 
 

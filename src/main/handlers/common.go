@@ -8,6 +8,8 @@ import (
      "main/service/vo"
 )
 
+const DEFAULT_FETCH_SIZE = 20
+
 
 func UserLoginCheck(req *gotom.GTRequest) bool {
 

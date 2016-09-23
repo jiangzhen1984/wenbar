@@ -31,6 +31,29 @@ func GetHotList(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
      gotom.LD("===%s\n", ptime)
      
      sess := dbs.GetMongoSession()
+     qr := sess.DB("test1").C("topic").Find(bson.M{"date": bson.M{"$lte" : time.Now()}}).Sort("-count").Limit(20).All(&topicList)
+
+     gotom.LD("=== topic len :%d   %s\n", len(topicList), qr)
+     gobj := gotom.Object(topicList)
+     return &gobj, nil
+}
+
+func GetNewestList(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
+     var topicList []*vo.Topic
+     var ptime time.Time
+  
+     if p == nil || len(p) == 0 {
+         ptime = time.Now()
+     } else {
+         ti, ok := (*p[0]).(time.Time)
+         if ok ==  false {
+              ti = time.Now()
+         }
+         ptime = ti
+     }
+     gotom.LD("===%s\n", ptime)
+     
+     sess := dbs.GetMongoSession()
      qr := sess.DB("test1").C("topic").Find(bson.M{"date": bson.M{"$lte" : time.Now()}}).Sort("-date").Limit(20).All(&topicList)
 
      gotom.LD("=== topic len :%d   %s\n", len(topicList), qr)
@@ -116,13 +139,38 @@ func GetTopicById(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
 
      tid, ok :=  (*p[0]).(string) 
      if ok == false {
+          return nil, gotom.ErrorMsg("NO such ID")
      }
-
   
      sess := dbs.GetMongoSession()
-     sess.DB("test1").C("topic").Find(bson.M{"id" : tid}).One(&topic)
-     gobject := gotom.Object(topic)     
-     return &gobject, nil
+     err := sess.DB("test1").C("topic").FindId(tid).One(&topic)
+     gotom.LD(" query topic by Id %s  %s\n", tid, err) 
+     if err == nil {
+         gobject := gotom.Object(&topic)
+         return &gobject, nil
+     } else {
+         return nil, gotom.ErrorMsg(" Query failed  !")
+     }
+}
+
+
+
+func UpdateTopicViewCount(dbs *DBSession, p...*gotom.Object) (*gotom.Object, error) {
+
+     var tid string
+     tid, ok :=  (*p[0]).(string) 
+     if ok == false {
+          return nil, gotom.ErrorMsg("NO such ID")
+     }
+
+     gotom.LD(" Update topic[%s] count\n", tid)
+
+     sess := dbs.GetMongoSession()
+     err := sess.DB("test1").C("topic").UpdateId(tid, bson.M{"$inc" : bson.M{"count" : 1}})
+     if err != nil {
+           gotom.LE(" Update view count error  %s", err)
+     }
+     return nil, nil
 }
 
 
@@ -130,13 +178,14 @@ func GetTopicById(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
 func  RecordTopicViewUser(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
      if p == nil || len(p) <= 0{
      }
-     vt, ok := (*p[0]).(vo.ViewTopic)
+     vt, ok := (*p[0]).(*vo.ViewTopic)
      if ok == false {
+           gotom.LP("==== convert failed %s  \n", *p[0])
      }
    
      vt.Date = time.Now()
      sess := dbs.GetMongoSession()
-     sess.DB("test1").C("view_topic").Insert(&vt)
+     sess.DB("test1").C("view_topic").Insert(vt)
     
      return nil,nil
 }

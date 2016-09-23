@@ -1,6 +1,10 @@
 
 package vo
 
+import (
+    "strconv"
+)
+
 
 type User struct {
 
@@ -19,6 +23,11 @@ type User struct {
      OutId     string
 
      Personal  *UserPersonal
+}
+
+
+func (u User) GetNativeID() string {
+     return strconv.FormatUint(u.NativeId, 10)
 }
 
 

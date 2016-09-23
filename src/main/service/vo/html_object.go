@@ -2,6 +2,9 @@
 
 package vo
 
+import (
+)
+
 
 type ItemPage struct {
     
@@ -30,6 +33,17 @@ type TopicHtml struct {
      Date          string
      RecCount      uint32
      Price        float32
+}
+
+
+func (th * TopicHtml) PopulateTopic(val *Topic) {
+     th.Tid          = val.Id
+     th.Title        = val.Title
+     th.Content      = val.Content
+     th.CreatorName  = val.Creator.Name
+     th.CreatorTitle = val.Creator.Title
+     th.CreatorId    = val.Creator.GetNativeID()
+     th.UserCount    = val.Count
 }
 
 
