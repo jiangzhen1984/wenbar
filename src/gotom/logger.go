@@ -21,6 +21,8 @@ const (
 var GoTomLogger * log.Logger = log.New(os.Stdout, "[GOTOM]", log.Ldate | log.Ltime | log.Lshortfile)
 var VLogLevel = VDebug
 
+var loglevelarr []string = []string{"[DEBUG", "[INFO]", "[WARN]", "[ERROR]"}
+
 
 func LD(format string, v ...interface{}) {
     LV(VDebug, format, v...)
@@ -39,7 +41,8 @@ func LE(format string, v  ...interface{}) {
 }
 
 func LV(level int, format string, v ...interface{}) {
-   GoTomLogger.Output(3, fmt.Sprintf(format, v...)) 
+   
+   GoTomLogger.Output(3, fmt.Sprintf(loglevelarr[level]+format, v...)) 
 }
 
 
