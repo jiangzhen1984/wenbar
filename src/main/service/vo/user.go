@@ -39,6 +39,8 @@ type UserPersonal struct {
      Revenue      float32
 
      QuesFee      float32 
+
+     Ans          int
 }
 
 

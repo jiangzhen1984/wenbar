@@ -28,7 +28,7 @@
              <div class="clear"></div>
         </div>
         <div class="topic_tit">
-           {{.Title}} <!-- 生命科学真的离我们生活很远吗？ -->
+           {{.Content}} <!-- 生命科学真的离我们生活很远吗？ -->
         </div>
         <div class="topic_detail">             
              <span class="topic_detail_author">         </span>
@@ -38,10 +38,10 @@
              </div>
              <div class="clear"></div>
            <div class="topic_detail_left_1">
-             1天前
+             {{.Date}}前
          </div>  
           <div class="topic_detail_right_1">
-             看过 2156
+             看过 {{.UserCount}}
          </div> 
           <div class="clear"></div>
         </div>
@@ -52,7 +52,7 @@
  	 <ul>
     	<li><a class="" href="/hot_list" target="_self">热门</a></li>
         <li><a class="" href="/newest_list" target="_self">发现</a></li>
-        <li><a class="self" href="#">我的</a></li>
+        <li><a class="self" target="_self" href="/personal">我的</a></li>
         
     </ul>
 </div>

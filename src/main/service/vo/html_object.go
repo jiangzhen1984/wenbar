@@ -90,3 +90,14 @@ type MyAnswerHtml struct {
     Page        ItemPage
 }
 
+
+type InquiryHtml struct {
+    InqUid                Wid
+    InqName               string
+    InqTitle              string
+    InqUserAnsweredQues   int
+    InqUserRevenue        float32
+    IsPublic              bool
+    ErrMsg                string
+}
+
