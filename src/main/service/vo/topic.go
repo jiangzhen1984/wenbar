@@ -4,7 +4,6 @@ package vo
 
 
 import (
-    "gotom"
     "time"
     "strconv"
 )
@@ -20,6 +19,8 @@ type Topic struct {
      Count     uint32
      Date      time.Time
      Creator   *User
+     IsPublic  bool
+     AskTo     Wid
      AnsList   []*Answer       
 }
 
@@ -31,15 +32,14 @@ func (t * Topic) GetCount() string {
 func (t * Topic) GetElapsedTime() string {
     var el []string = []string{"秒", "分钟", "小时", "天", "周", "月" , "年"}
     duration := time.Now().Sub(t.Date)
-    gotom.LD("===%s\n", duration)
-    if duration.Hours() > 1 {
+    if duration.Hours() >= 1 {
        hr := int(duration.Hours()) + 1
-       if m := hr / 24 * 30; m > 1 {
+       if m := hr / (24 * 30); m >= 1 {
            return strconv.Itoa(m) + el[5]
-       } else if w := hr/ 24 * 7; m > 1 {
+       } else if w := hr/ (24 * 7); w >= 1 {
            return strconv.Itoa(w) + el[4]
-       } else if d := hr/ 24; d > 1 {
-           return strconv.Itoa(w) + el[3]
+       } else if d := hr/ 24; d >= 1 {
+           return strconv.Itoa(d) + el[3]
        } else {
            return strconv.Itoa(hr) + el[2]
        }

@@ -31,7 +31,7 @@ func GetHotList(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
      gotom.LD("===%s\n", ptime)
      
      sess := dbs.GetMongoSession()
-     qr := sess.DB("test1").C("topic").Find(bson.M{"date": bson.M{"$lte" : time.Now()}}).Sort("-count").Limit(20).All(&topicList)
+     qr := sess.DB("test1").C("topic").Find(bson.M{"date": bson.M{"$lte" : time.Now()}, "ispublic" : true}).Sort("-count").Limit(20).All(&topicList)
 
      gotom.LD("=== topic len :%d   %s\n", len(topicList), qr)
      gobj := gotom.Object(topicList)
@@ -54,7 +54,7 @@ func GetNewestList(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
      gotom.LD("===%s\n", ptime)
      
      sess := dbs.GetMongoSession()
-     qr := sess.DB("test1").C("topic").Find(bson.M{"date": bson.M{"$lte" : time.Now()}}).Sort("-date").Limit(20).All(&topicList)
+     qr := sess.DB("test1").C("topic").Find(bson.M{"date": bson.M{"$lte" : time.Now()}, "ispublic" : true}).Sort("-date").Limit(20).All(&topicList)
 
      gotom.LD("=== topic len :%d   %s\n", len(topicList), qr)
      gobj := gotom.Object(topicList)
@@ -125,6 +125,9 @@ func GetPersonalTopicList(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, e
           case QUESTION_QUERY:
               gotom.LD("own question query ==>%s\n", ti)
               err = sess.DB("test1").C("topic").Find(bson.M{"date": bson.M{"$lte" : ti}, "creator.uid" : tid}).Sort("-date").Limit(20).All(&topicList)
+          case ANSWER_QUERY:
+              gotom.LD("Ask to me query ==>%s\n", ti)
+              err = sess.DB("test1").C("topic").Find(bson.M{"date": bson.M{"$lte" : ti}, "askto" : tid}).Sort("-date").Limit(20).All(&topicList)
           case VIEWED_QUERY:
               gotom.LD("my viewed query ==>%s\n", tid)
               query := bson.M{"date": bson.M{"$lte" : ti}, "viewuserid" : tid}
@@ -136,7 +139,6 @@ func GetPersonalTopicList(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, e
               for _, val := range result {
                    idlist = append(idlist, val.TopicId)
               }
-              gotom.LD("====%s    %s\n", err, idlist)
 
               err = sess.DB("test1").C("topic").Find(bson.M{"_id" : bson.M{"$in" : idlist}}).All(&topicList)
               

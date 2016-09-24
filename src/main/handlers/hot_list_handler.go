@@ -33,7 +33,6 @@ func HotListHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.G
      for _, val := range topiclist {
           vth := vo.TopicHtml{}
           vth.PopulateTopic(val)
-          gotom.LD("=====000000 %s\n", vth)
           data.TopicList = append(data.TopicList, vth)
      }
     

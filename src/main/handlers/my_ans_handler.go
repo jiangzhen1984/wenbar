@@ -11,7 +11,7 @@ import (
 )
 
 
-func MyInquiryHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GTTemplateMapping)  (*gotom.GTTemplate, gotom.Object, error) {
+func MyAnsHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GTTemplateMapping)  (*gotom.GTTemplate, gotom.Object, error) {
      gotom.LF()
 
      if tpls == nil {
@@ -24,7 +24,7 @@ func MyInquiryHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom
           Redirect(resp, req, "/login")
           return nil, nil, nil 
      }
-     gotype := gotom.Object(ws.QUESTION_QUERY)
+     gotype := gotom.Object(ws.ANSWER_QUERY)
      gotime := gotom.Object(time.Now())
      gonativeId := gotom.Object(user.Uid)
      gdata, err := ws.DoService(ws.GetPersonalTopicList, &gotype, &gotime, &gonativeId)
@@ -44,7 +44,7 @@ func MyInquiryHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom
           data.TopicList = append(data.TopicList, vt)
      }
      
-     return tpls.Tpls["myinquiry"], data, nil
+     return tpls.Tpls["myanswer"], data, nil
 }
 
 

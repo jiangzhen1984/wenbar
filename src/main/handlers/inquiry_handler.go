@@ -45,6 +45,7 @@ func InquiryHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.G
           return tpls.Tpls["inquiry"], inq, nil
           
      } else if req.Req.Method == "POST" {
+          is := req.P("ispublic")
           asq, _ :=  strconv.ParseInt(req.P("iuq"), 10, 32)
           iq, _  :=  strconv.ParseFloat(req.P("iur"), 32)
           inq := vo.InquiryHtml{}
@@ -53,13 +54,34 @@ func InquiryHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.G
           inq.InqUserAnsweredQues = int(asq) 
           inq.InqUserRevenue      = float32(iq)
           inq.InqUid              = vo.Wid(req.P("anu"))
+          if is == "on" { 
+                inq.IsPublic      = true 
+          }  else {
+                inq.IsPublic      = false
+          }
           con := req.P("content")
           if len(con) <= 0 {
               inq.ErrMsg = "请输入问题内容"
               return tpls.Tpls["inquiry"], inq, nil
           }
               
-          gtopic  := gotom.Object(vo.Topic{Title:"sss", Content:con, Creator : GetLoggedUser(req)})
+          topictitle := "" 
+          if len(con) > 15 {
+                topictitle = con[:15]
+          } else {
+                topictitle = con
+          }
+          topic := vo.Topic{}
+          topic.Title      = topictitle
+          topic.Content    = con
+          topic.Creator    = GetLoggedUser(req) 
+          topic.AskTo      = inq.InqUid
+          topic.IsPublic   = inq.IsPublic
+          if len(topic.AskTo) <= 0 {
+               topic.IsPublic   = true
+               gotom.LI("Force update topic public to true caused by no askto")
+          }
+          gtopic  := gotom.Object(topic)
           _, err := ws.DoService(ws.CreateTopic, &gtopic) 
           if err != nil {
                 inq.ErrMsg = "提交问题失败"
