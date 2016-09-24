@@ -363,6 +363,11 @@ func (req * GTRequest) CreateSession(resp GTResponse) *GTSession {
 }
 
 
+func (req * GTRequest) P(key string) string {
+    return req.Req.FormValue(key)
+}
+
+
 
 func (mp Mapping) String() string {
      return fmt.Sprintf("[URI : %s  Func  %p]", mp.Uri, mp.Hld) 

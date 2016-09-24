@@ -60,6 +60,10 @@ func ErrorMsg(format string, a ...interface{}) error {
     return errors.New(fmt.Sprintf(format, a...))
 }
 
+func E(format string, a ...interface{}) error {
+    return ErrorMsg(format, a...)
+}
+
 
 func SetLogLevel(level int) {
     VLogLevel = level
