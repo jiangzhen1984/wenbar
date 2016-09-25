@@ -30,7 +30,14 @@
     <input type="hidden"  value="{{.InqUserRevenue}}" name="iur" />
     <div class="zw"><center><font style="color:#ff0000;" >{{.ErrMsg}}</font></center></div>
     <textarea name="content" placeholder="向李##提问，等Ta回答；超过４８小时未回答，将按支付路径全额退款，被回答后可免费向Ta追问。"></textarea>
-	<label><input name="ispublic" type="checkbox" value="{{.IsPublic}}" />公开提问，每被偷偷看1次，你从中分成￥0.5元</label>
+	<label>
+            {{if .IsPublic}}
+            <input name="ispublic" type="checkbox" checked/>
+            {{else}}
+            <input name="ispublic" type="checkbox"/>
+            {{end}}
+           
+            公开提问，每被偷偷看1次，你从中分成￥0.5元</label>
 	<p>100</p>
 	<input type="submit" value="提交" class="submit"> 
      </form>

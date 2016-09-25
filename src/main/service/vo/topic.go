@@ -12,16 +12,16 @@ import (
 
 type Topic struct {
 
-     Id        Wid      `json:"id" bson:"_id,omitempty"`
-     Title     string 
-     Content   string
-     Price     float32
-     Count     uint32
-     Date      time.Time
-     Creator   *User
-     IsPublic  bool
-     AskTo     Wid
-     AnsList   []*Answer       
+     Id        Wid            `json:"id" bson:"_id,omitempty"`
+     Title     string         `json:"title"` 
+     Content   string         `json:"content"`
+     Price     float32        `json:"price"`
+     Count     uint32         `json:"count"`
+     Date      time.Time      `json:"data"`
+     Creator   *User          `json:"creator"`
+     IsPublic  bool           `json:"inpub"`
+     AskTo     Wid            `json:"askto"`
+     AnsList   []*Answer      `json:-` 
 }
 
 

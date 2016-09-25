@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>我的问答</title>
+<link href="css/page_style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div class="top">
+    <div class="t_l"><a href="">  </a></div>
+	<div class="t_c">我问</div>
+	<div class="t_r"><a href="">  </a></div>
+</div>
+
+
+  {{range .TopicList}}
+  <div class="topic">
+        <div class="topic_detail">             
+             <div class="topic_detail_left">
+             	<img class="topic_detail_photo" src="images/3_10.jpg" align="middle">
+                <span class="topic_detail_img"><p>张大可</p></span>
+                 <span class="topic_detail_price">$100  </span>
+             </div>
+       		 <div class="topic_detail_right">
+    		 </div>  
+             <div class="clear"></div>
+        </div>
+        <div class="topic_tit">
+           {{.Content}} <!-- 生命科学真的离我们生活很远吗？ -->
+        </div>
+        <div class="topic_detail">             
+             <span class="topic_detail_author">         </span>
+             <div class="topic_detail_left">
+             	<img class="topic_detail_photo" src="images/3_10.jpg" align="middle">
+                <span class="topic_detail_words"><p><img class="topic_detail_bg_voice" align="top" src="images/icon_voice_13.png">1元偷偷看1元偷偷看</p></span>
+             </div>
+             <div class="clear"></div>
+           <div class="topic_detail_left_1">
+             {{.Date}}前
+         </div>  
+          <div class="topic_detail_right_1">
+             看过 {{.UserCount}}
+         </div> 
+          <div class="clear"></div>
+        </div>
+   </div>
+   {{end}}
+
+<div class="bottom">
+ 	 <ul>
+    	<li><a class="" href="/hot_list" target="_self">热门</a></li>
+        <li><a class="" href="/newest_list" target="_self">发现</a></li>
+        <li><a class="self" target="_self" href="/personal">我的</a></li>
+        
+    </ul>
+</div>
+
+</body>
+</html>

@@ -12,31 +12,30 @@
 
 
 </style>
+<script type="text/javascript" src="js/jquery-2.1.1.min.js" ></script>
+<script type="text/javascript" src="js/loader.js" ></script>
+<script type="text/javascript" src="js/hot_list.js" ></script>
 </head>
 
 <body >
 <div class="search">
     <button class="search_btn" type="submit"><img src="images/3_03.jpg"></button><input class="search_box" type="text" placeholder="搜索感兴趣的人和事件"  >
 </div>
-<div class="content">
+<div class="content" id="content">
         {{range .TopicList}}
    	<div class="topic">
         <div class="topic_tit">
-          {{.Content}} <!-- 生命科学真的离我们生活很远吗？ -->
+          <a href="/question?qid={{.Tid}}" >{{.Content | html}}</a>
         </div>
         <div class="topic_detail">             
-             <div>
-             <span class="topic_detail_author">{{.CreatorName }}<!-- 刘宏俊--> | {{.CreatorTitle}}
-              </div>
+             <div> <span class="topic_detail_author">{{.CreatorName }}<!-- 刘宏俊--> | {{.CreatorTitle}} </div>
              <div class="topic_detail_left">
              	<a href="/inquiry?anu={{.CreatorId}}" target="_self" ><img class="topic_detail_photo" src="images/3_10.jpg" align="middle"></a>
-                <a href="/question?qid={{.Tid}}" ><span class="topic_detail_words"><p><img class="topic_detail_bg_voice" align="top" src="images/icon_voice_13.png">1元偷偷看1元偷偷看</p></span></a>
+                <a href="/question?qid={{.Tid}}" ><span class="topic_detail_words"><p><img class="topic_detail_bg_voice" align="top" src="images/icon_voice_13.png">1元偷偷看</p></span></a>
              </div>
-       		 <div class="topic_detail_right">
-             看过 {{.UserCount}}
-    		 </div>  
+       		 <div class="topic_detail_right"> 看过 {{.UserCount}} </div>  
              <div class="clear"></div>
-        </div>    
+        </div> 
 	</div>
         {{end}}
 </div>
