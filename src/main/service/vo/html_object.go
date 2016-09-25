@@ -3,6 +3,7 @@
 package vo
 
 import (
+    "time"
 )
 
 
@@ -32,7 +33,8 @@ type TopicHtml struct {
      AnsList       []TopicAnswerList
      Date          string
      RecCount      uint32
-     Price        float32
+     Price         float32
+     TimeStamp     time.Time 
 }
 
 
@@ -45,6 +47,7 @@ func (th * TopicHtml) PopulateTopic(val *Topic) {
      th.CreatorId    = val.Creator.GetNativeID()
      th.UserCount    = val.Count
      th.Date         = val.GetElapsedTime()
+     th.TimeStamp    = val.Date
 }
 
 

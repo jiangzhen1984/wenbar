@@ -17,7 +17,8 @@ type Topic struct {
      Content   string         `json:"content"`
      Price     float32        `json:"price"`
      Count     uint32         `json:"count"`
-     Date      time.Time      `json:"data"`
+     Date      time.Time      `json:"date,string"`
+     TimeStamp int64         `json:"timestamp,string"`
      Creator   *User          `json:"creator"`
      IsPublic  bool           `json:"inpub"`
      AskTo     Wid            `json:"askto"`

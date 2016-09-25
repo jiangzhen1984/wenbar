@@ -8,20 +8,26 @@ import (
     "main/service/vo"
     "main/service"
     "encoding/json"
+    "strconv"
 )
-
 
 
 
 func HotListHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GTTemplateMapping)  (*gotom.GTTemplate, gotom.Object, error) {
      gotom.LF()
+     var timestamp string
 
      if tpls == nil {
           gotom.LE("No template mapping \n")
           return nil, nil, gotom.ErrorMsg("No template Mapping")
      }
 
-     ti  := gotom.Object(time.Now())
+     timestamp  = req.P("ts")
+     if len(timestamp) <= 0 {
+          timestamp = strconv.FormatInt(time.Now().Unix(), 10)
+     }
+     gotom.LI(" query time >>> %s\n", timestamp)
+     ti  := gotom.Object(timestamp)
      fs  := gotom.Object(DEFAULT_FETCH_SIZE)
      gdata, err := ws.DoService(ws.GetHotList, &ti, &fs)
      if err != nil {

@@ -7,6 +7,7 @@ import (
      "main/service/vo"
      "time"
      "gopkg.in/mgo.v2/bson"
+     "strconv"
 )
 
 
@@ -17,21 +18,20 @@ type TopicList struct {
 
 func GetHotList(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
      var topicList []*vo.Topic
-     var ptime time.Time
-  
-     if p == nil || len(p) == 0 {
-         ptime = time.Now()
-     } else {
-         ti, ok := (*p[0]).(time.Time)
-         if ok ==  false {
-              ti = time.Now()
-         }
-         ptime = ti
+     var ptime = time.Now().Unix()
+     if p != nil && len(p) > 0 {
+          if ti, ok := (*p[0]).(string); ok == true {
+              gotom.LD("  time %s  \n", ti)
+              ptime, _ = strconv.ParseInt(ti, 10, 64)
+          } else {
+              gotom.LD(" Parse type error use default time %d  \n", ptime)
+          }
      }
-     gotom.LD("===%s\n", ptime)
+
+     gotom.LD(" query time :  %d   %s\n", ptime, time.Unix(ptime, 0))
      
      sess := dbs.GetMongoSession()
-     qr := sess.DB("test1").C("topic").Find(bson.M{"date": bson.M{"$lte" : time.Now()}, "ispublic" : true}).Sort("-count").Limit(20).All(&topicList)
+     qr := sess.DB("test1").C("topic").Find(bson.M{"timestamp": bson.M{"$lt" : ptime}, "ispublic" : true}).Sort("-count", "-timestamp").Limit(10).All(&topicList)
 
      gotom.LD("=== topic len :%d   %s\n", len(topicList), qr)
      gobj := gotom.Object(topicList)
@@ -40,21 +40,18 @@ func GetHotList(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
 
 func GetNewestList(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
      var topicList []*vo.Topic
-     var ptime time.Time
-  
-     if p == nil || len(p) == 0 {
-         ptime = time.Now()
-     } else {
-         ti, ok := (*p[0]).(time.Time)
-         if ok ==  false {
-              ti = time.Now()
-         }
-         ptime = ti
+     var ptime = time.Now().Unix()
+     if p != nil && len(p) > 0 {
+          if ti, ok := (*p[0]).(string); ok == true {
+              gotom.LD("  time %s  \n", ti)
+              ptime, _ = strconv.ParseInt(ti, 10, 64)
+          } else {
+              gotom.LD(" Parse type error use default time %d  \n", ptime)
+          }
      }
-     gotom.LD("===%s\n", ptime)
-     
+
      sess := dbs.GetMongoSession()
-     qr := sess.DB("test1").C("topic").Find(bson.M{"date": bson.M{"$lte" : time.Now()}, "ispublic" : true}).Sort("-date").Limit(20).All(&topicList)
+     qr := sess.DB("test1").C("topic").Find(bson.M{"timestamp": bson.M{"$lt" : ptime}, "ispublic" : true}).Sort("-timestamp").Limit(10).All(&topicList)
 
      gotom.LD("=== topic len :%d   %s\n", len(topicList), qr)
      gobj := gotom.Object(topicList)
@@ -78,6 +75,7 @@ func CreateTopic(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
      if ok == true {
           ti.Date = time.Now()
           ti.Id = vo.Wid(bson.NewObjectId().Hex())
+          ti.TimeStamp = ti.Date.Unix()
           err := sess.DB("test1").C("topic").Insert(&ti)
           gotom.LD("===create result:%s\n", err)
           gotom.LD("===create result:%s\n", ti)

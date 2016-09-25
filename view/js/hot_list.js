@@ -1,11 +1,15 @@
 
+var current_timestamp = null;
     function load() {
         $.ajax({
-             url: '/hot_list?rfrom=ajax',
+             url: '/hot_list?rfrom=ajax&ts='+encodeURIComponent(Math.floor(current_timestamp.getTime() / 1000)),
              dataType: 'json',
              success: function(json) {
+                 if (json == null || json == "undefined") {
+                     console.log("NO more data.");
+                     return;
+                 }
                   var el = $('#content');
-                  console.log(json);
                   for (var i = 0; i < json.length; i++) {
                       var str ="";
                       str += '<div class="topic"> '; 
@@ -24,6 +28,8 @@
 	              str += '</div>'
                       el.append(str);
                   }
+
+                  current_timestamp = new Date(json[json.length -1].date);
                }
            });
 

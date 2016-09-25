@@ -84,7 +84,6 @@ type WSServiceFunc func(ds * DBSession, o ...*gotom.Object) (*gotom.Object, erro
 
 
 func DoService(wf WSServiceFunc, o ...*gotom.Object) (* gotom.Object, error) {
-      gotom.LF()
       gotom.LI("====> %s\n", wf)
       gotom.LI("====> %s\n", o)
       sess := CreateDBSession() 
