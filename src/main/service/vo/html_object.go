@@ -30,11 +30,15 @@ type TopicHtml struct {
      CreatorName   string
      CreatorTitle  string
      CreatorId     string
+     AskToName     string
+     AskToId       string
+     AskToTitle    string
      AnsList       []TopicAnswerList
      Date          string
      RecCount      uint32
      Price         float32
      TimeStamp     time.Time 
+     RelatedList   []TopicHtml
 }
 
 

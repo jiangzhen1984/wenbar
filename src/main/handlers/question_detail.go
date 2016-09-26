@@ -38,6 +38,16 @@ func QuestionDetailHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * 
              } else {
                   gotom.LE("===query topic failed %s   %s\n", topic, ok)
              }
+             relatedList := make([]vo.TopicHtml, 0, 4)
+             for i := 0; i < 4; i ++  {
+                   rt := vo.TopicHtml{}
+                   rt.Title ="内分泌失调怎么办?"
+                   rt.AskToName ="刘博士"
+                   rt.AskToTitle = "北京中医药大学博士"
+                   relatedList = append(relatedList, rt)
+             } 
+ 
+             topicHtml.RelatedList = relatedList
              return tpls.Tpls["questiondetail"], &topicHtml, nil
          }
          gotom.LD("========not found question\n")

@@ -40,19 +40,19 @@
 
 <div class="cen_e">
     <a href=""><div class="ce_01">打赏</div></a>
-	<div class="ce_02"></div>
+    <div class="ce_02">问吧推荐</div>
 </div>
+{{range .RelatedList}}
 <div class="cen_f">
     <ul>
-         {{range .AnsList}}
          <li>
               <p><a href="">{{.Title}}</a></p>
               <span><img src="images/p8.jpg" /></span>
-              <div class="cf_01">{{.AnsUserName}} | {{.AnsUserTitle}}</div>
+              <div class="cf_01">{{.AskToName}} | {{.AskToTitle}}</div>
            </li>
-          {{end}}
 	</ul>
 </div>
+{{end}}
 <div class="foot"></div>
 </body>
 </html>
