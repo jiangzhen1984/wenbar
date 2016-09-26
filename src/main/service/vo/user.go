@@ -41,6 +41,10 @@ type UserPersonal struct {
      QuesFee      float32 
 
      Ans          int
+ 
+     BeViewed     int
+
+     UnAns        int
 }
 
 

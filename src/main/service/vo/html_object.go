@@ -92,6 +92,7 @@ type PersonalHtml struct {
     Incoming     float32 
     Revenue      float32
     Fee          float32
+    BeViewed     int
 }
 
 
