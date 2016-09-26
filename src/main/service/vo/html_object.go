@@ -3,6 +3,8 @@
 package vo
 
 import (
+    "html/template"
+    "strings"
     "time"
 )
 
@@ -24,7 +26,7 @@ type HotListHtml struct {
 type TopicHtml struct {
      Tid           Wid
      Title         string
-     Content       string
+     Content       template.HTML
      UserCount     uint32
      ErrMsg        string
      CreatorName   string
@@ -42,10 +44,22 @@ type TopicHtml struct {
 }
 
 
+func (th * TopicHtml) PopulateTopicReHtml(val *Topic) {
+     th.Tid          = val.Id
+     th.Title        = val.Title
+     th.Content      = template.HTML(strings.Replace(val.Content, "\n", "<br />", -1))
+     th.CreatorName  = val.Creator.Name
+     th.CreatorTitle = val.Creator.Title
+     th.CreatorId    = val.Creator.GetNativeID()
+     th.UserCount    = val.Count
+     th.Date         = val.GetElapsedTime()
+     th.TimeStamp    = val.Date
+}
+
 func (th * TopicHtml) PopulateTopic(val *Topic) {
      th.Tid          = val.Id
      th.Title        = val.Title
-     th.Content      = val.Content
+     th.Content      = template.HTML(val.Content)
      th.CreatorName  = val.Creator.Name
      th.CreatorTitle = val.Creator.Title
      th.CreatorId    = val.Creator.GetNativeID()

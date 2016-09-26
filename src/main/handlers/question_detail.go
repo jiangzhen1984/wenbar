@@ -34,7 +34,7 @@ func QuestionDetailHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * 
              }
              topicHtml := new(vo.TopicHtml)
              if topic != nil {
-                  topicHtml.PopulateTopic(topic) 
+                  topicHtml.PopulateTopicReHtml(topic) 
              } else {
                   gotom.LE("===query topic failed %s   %s\n", topic, ok)
              }

@@ -21,7 +21,7 @@ func MyAnsHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GTT
 
      user := GetLoggedUser(req)
      if user == nil {
-          Redirect(resp, req, "/login")
+          Redirect(resp, req, "/login?from=my_ans")
           return nil, nil, nil 
      }
      gotype := gotom.Object(ws.ANSWER_QUERY)

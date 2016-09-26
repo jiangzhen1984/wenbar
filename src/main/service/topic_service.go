@@ -110,7 +110,9 @@ func GetPersonalTopicList(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, e
      ti, ok := (*p[1]).(time.Time)
      if ok ==  false {
           ti = time.Now()
+          gotom.LD("use default time to query personal topic %s\n", ti)
      }
+     gotom.LD("use time to query personal topic %s\n", ti)
   
      tid, ok := (*p[2]).(vo.Wid)
      if ok ==  false {
@@ -122,15 +124,15 @@ func GetPersonalTopicList(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, e
      switch ty {
           case QUESTION_QUERY:
               gotom.LD("own question query ==>%s\n", ti)
-              err = sess.DB("test1").C("topic").Find(bson.M{"date": bson.M{"$lte" : ti}, "creator.uid" : tid}).Sort("-date").Limit(20).All(&topicList)
+              err = sess.DB("test1").C("topic").Find(bson.M{"date": bson.M{"$lte" : ti}, "creator.uid" : tid}).Sort("-date").Limit(10).All(&topicList)
           case ANSWER_QUERY:
               gotom.LD("Ask to me query ==>%s\n", ti)
-              err = sess.DB("test1").C("topic").Find(bson.M{"date": bson.M{"$lte" : ti}, "askto" : tid}).Sort("-date").Limit(20).All(&topicList)
+              err = sess.DB("test1").C("topic").Find(bson.M{"date": bson.M{"$lte" : ti}, "askto" : tid}).Sort("-date").Limit(10).All(&topicList)
           case VIEWED_QUERY:
               gotom.LD("my viewed query ==>%s\n", tid)
               query := bson.M{"date": bson.M{"$lte" : ti}, "viewuserid" : tid}
               project := bson.M{"topicid" : 1}
-              err := sess.DB("test1").C("view_topic").Find(query).Sort("-date").Limit(20).Select(project).All(&result)
+              err := sess.DB("test1").C("view_topic").Find(query).Sort("-date").Limit(10).Select(project).All(&result)
               idlist := []string{}
               if err != nil {
               }

@@ -5,6 +5,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>我的问答</title>
 <link href="css/page_style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery-2.1.1.min.js" ></script>
+<script type="text/javascript" src="js/loader.js" ></script>
+<script type="text/javascript" src="js/my_inquiry.js" ></script>
 </head>
 
 <body>
@@ -14,7 +17,7 @@
 	<div class="t_r"><a href="">  </a></div>
 </div>
 
-
+<div class="content" id="content">
   {{range .TopicList}}
   <div class="topic">
         <div class="topic_detail">             
@@ -46,7 +49,12 @@
           <div class="clear"></div>
         </div>
    </div>
+   <script type="text/javascript">
+        current_timestamp = new Date({{.TimeStamp}});
+   </script>
    {{end}}
+
+</div>
 
 <div class="bottom">
  	 <ul>
