@@ -23,6 +23,8 @@ type User struct {
      OutId     string
 
      Personal  *UserPersonal
+  
+     WeChat    *PersonalWeChat
 }
 
 
@@ -45,6 +47,32 @@ type UserPersonal struct {
      BeViewed     int
 
      UnAns        int
+}
+
+
+type PersonalWeChat struct {
+
+     OpenId        string
+
+     NickName      string
+  
+     Sex           int
+
+     Province      string
+
+     City          string
+
+     Country       string
+
+     Unionid       string
+
+     Avatar        string
+
+     Token         string
+
+     TokenTime     int64
+
+     TokenExprisIn int
 }
 
 
