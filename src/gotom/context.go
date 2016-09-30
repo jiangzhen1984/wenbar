@@ -357,7 +357,7 @@ func (req * GTRequest) CreateSession(resp GTResponse) *GTSession {
      req.sess = sess
 
      LD("====create session%s\n", sess)
-     http.SetCookie(*(resp.Resp), &http.Cookie{Name : GOTOM_SESSION_ID, Value : strconv.FormatUint(sess.Id, 10)})
+     http.SetCookie(*(resp.Resp), &http.Cookie{Name : GOTOM_SESSION_ID, Value : strconv.FormatUint(sess.Id, 10), MaxAge: 60 * 10})
      
      return sess
 }

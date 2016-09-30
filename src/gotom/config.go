@@ -11,17 +11,19 @@ import (
 
 type GTConfig struct {
 
-     DebugMode   bool
+     DebugMode         bool
 
-     Port        string
+     Port              string
      
-     Tpldir      string
+     Tpldir            string
    
-     TplSufix    string
+     TplSufix          string
 
-     Mapping     []*Mapping 
+     Mapping           []*Mapping 
 
-     TplMapping  map[string]*GTTemplateMapping
+     TplMapping        map[string]*GTTemplateMapping
+
+     SessionExpires    int
 }
 
 
