@@ -6,6 +6,7 @@ package handlers
 import (
     "gotom"
     "main/service/vo"
+    "main/service/wechat"
 )
 
 
@@ -20,14 +21,15 @@ func LoginHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GTT
      } else if req.Req.Method == "POST" {
          //TODO update for wexin auth
          sess := req.CreateSession(resp)
-         sess.SetAttribute("user", &vo.User{NativeId : 123, Uid: "123", Name : "test", Title :"test"})
-         from := req.Req.FormValue("from")
-         gotom.LI("====from :%s\n", from)
-         n := len(from)
-         if n <= 0 {
-              from = "/hot_list"
-         }
-         Redirect(resp, req, from) 
+         user := new(vo.User)
+         sess.SetAttribute("user", user)
+
+         wechatuser := wechat.DC().InitWeChatUser()
+
+         sess.SetAttribute("wechatuser", wechatuser)
+         wechatuser.BuildAuthUrl("")
+         Redirect(resp, req, wechatuser.WebAuthUrl) 
+
      } else {
          Redirect(resp, req, "/hot_list") 
          return nil, nil, nil

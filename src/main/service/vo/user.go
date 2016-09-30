@@ -3,6 +3,9 @@ package vo
 
 import (
     "strconv"
+    "gotom"
+    "time"
+    "main/service/wechat"
 )
 
 
@@ -72,8 +75,35 @@ type PersonalWeChat struct {
 
      TokenTime     int64
 
-     TokenExprisIn int
+     TokenExpired  int
 }
 
 
+
+func (u User) HandleWeChatResponse(t int, us * wechat.WeChatUser, ret bool, data interface{}) {
+     if !ret {
+           gotom.LD(" Handle wechatuser auth failed \n")
+           return
+     }
+
+     switch t {
+          case wechat.RESPONSE_TYPE_USER_AUTH:
+                u.getUserTokenInfo(us, ret, data)
+          default:
+                gotom.LW("Unkown type of response %d\n", t)
+     }
+
+}
+
+
+func (u User) getUserTokenInfo(user * wechat.WeChatUser, ret bool, data interface{}) {
+     ar := data.(wechat.AuthResponse)
+     pwc := new(PersonalWeChat)
+     pwc.OpenId        = ar.Openid
+     pwc.Token         = ar.Access_token
+     pwc.TokenTime     = time.Now().Unix()
+     pwc.TokenExpired  = ar.Expires_in
+    
+     //TODO save user information to database 
+}
 
