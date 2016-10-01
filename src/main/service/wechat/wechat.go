@@ -8,6 +8,7 @@ import (
      "net/http"
      "time"
      "gotom"
+     "net/url"
 )
 
 
@@ -184,7 +185,7 @@ func (wcu * WeChatUser) BuildAuthUrl(redirectUrl string) {
       }
       url :=  WeChatUserAuthURL +  
               "appid=" + wcu.Conf.AppId +
-              "&redirect_uri=" + redirect +
+              "&redirect_uri=" + url.QueryEscape(redirect) +
               "&response_type=code" +
               "&scope=snsapi_userinfo" +
               "&state=wechatuserauth" +
