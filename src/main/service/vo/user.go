@@ -80,7 +80,7 @@ type PersonalWeChat struct {
 
 
 
-func (u User) HandleWeChatResponse(t int, us * wechat.WeChatUser, ret bool, data interface{}) {
+func (u User) OnResponse(t int, us * wechat.WeChatUser, ret bool, data interface{}) {
      if !ret {
            gotom.LD(" Handle wechatuser auth failed \n")
            return
@@ -104,6 +104,7 @@ func (u User) getUserTokenInfo(user * wechat.WeChatUser, ret bool, data interfac
      pwc.TokenTime     = time.Now().Unix()
      pwc.TokenExpired  = ar.Expires_in
     
+    gotom.LI("====> user %s\n", ar)
      //TODO save user information to database 
 }
 

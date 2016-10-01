@@ -10,8 +10,9 @@ import (
 
 
 var  WechatConf * wechat.WeChatConfig = &wechat.WeChatConfig {
-   AppId   : "wxc95bca05a3e20730",
-   Secret  : "9b6ad04958e230c395257fed5784731a",
+   AppId       : "wxc95bca05a3e20730",
+   Secret      : "9b6ad04958e230c395257fed5784731a",
+   ResponseURL : "http://www.wenbar.com/wechat", 
 }
 
 var conf *gotom.GTConfig = &gotom.GTConfig { 
@@ -29,6 +30,7 @@ var conf *gotom.GTConfig = &gotom.GTConfig {
                            {"/my_answer",     handlers.MyAnsHandler},
                            {"/question",      handlers.QuestionDetailHandler},
                            {"/inquiry",       handlers.InquiryHandler},
+                           {"/wechat",        handlers.WeChatHandler},
                       },
      TplMapping     : map[string]*gotom.GTTemplateMapping {
                            "/hot_list"    : {

@@ -11,10 +11,9 @@ import (
 
 
 func main() {
-    var  confs []* wechat.WeChatConfig =  wechat.InitWeChatConfig("")
-    for _, val := range confs {
-           val.AuthServer()
-    }
+    wechat.WeChatConfs = []*wechat.WeChatConfig{WechatConf}
+    WechatConf.AuthServer()
+    gotom.LI("[wechat] auth initalized ==>%s\n", WechatConf)
     ws.InitDB(ws.DBConfiguration{DBUrl:"localhost"})
     gotom.InitServer(conf)
 }
