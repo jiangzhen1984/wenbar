@@ -24,16 +24,13 @@ func MyAnsHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GTT
           Redirect(resp, req, "/login?from=my_ans")
           return nil, nil, nil 
      }
-     gotype := gotom.Object(ws.ANSWER_QUERY)
-     gotime := gotom.Object(time.Now())
-     gonativeId := gotom.Object(user.Uid)
-     gdata, err := ws.DoService(ws.GetPersonalTopicList, &gotype, &gotime, &gonativeId)
+     gdata, err := ws.DoService(ws.GetPersonalTopicList, ws.ANSWER_QUERY, time.Now(), user.Uid)
 
      if err != nil {
            ///TODO  check error for query
            gotom.LE("===>%s\n", err)
      }
-     topiclist := (*gdata).([]*vo.Topic)
+     topiclist := gdata.([]*vo.Topic)
      
      gotom.LD("====>%d  \n", len(topiclist))
      data := new(vo.HotListHtml)   

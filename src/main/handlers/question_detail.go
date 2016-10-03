@@ -19,18 +19,16 @@ func QuestionDetailHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * 
               //TODO redirect to error page
               return nil, nil, gotom.ErrorMsg("Not support method %s", req.Req.Method)
          }
-         gobj := gotom.Object(qid)
-         if gobject, err := ws.DoService(ws.GetTopicById, &gobj); err == nil {
-             topic, ok:= (*gobject).(*vo.Topic)
+         if gobject, err := ws.DoService(ws.GetTopicById, qid); err == nil {
+             topic, ok:= gobject.(*vo.Topic)
              //TODO update topic view count
              
-             ws.DoService(ws.UpdateTopicViewCount, &gobj)
+             ws.DoService(ws.UpdateTopicViewCount, topic)
              if user := GetLoggedUser(req); user != nil {
                   vt := new(vo.ViewTopic)
                   vt.ViewUser = user
                   vt.Topic = topic
-                  gobj = gotom.Object(vt)
-                  ws.DoService(ws.RecordTopicViewUser, &gobj)
+                  ws.DoService(ws.RecordTopicViewUser, vt)
              }
              topicHtml := new(vo.TopicHtml)
              if topic != nil {

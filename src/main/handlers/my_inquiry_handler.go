@@ -35,13 +35,10 @@ func MyInquiryHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom
            timestamp = time.Unix(tsint, 0)
      }
      gotom.LD(" My Inquriy timestamp :%d  %s\n", ts, timestamp)
-     gotype := gotom.Object(ws.QUESTION_QUERY)
-     gotime := gotom.Object(timestamp)
-     gonativeId := gotom.Object(user.Uid)
 
-     gdata, err := ws.DoService(ws.GetPersonalTopicList, &gotype, &gotime, &gonativeId)
+     gdata, err := ws.DoService(ws.GetPersonalTopicList, ws.QUESTION_QUERY, timestamp, user.Uid)
 
-     topiclist := (*gdata).([]*vo.Topic)
+     topiclist := gdata.([]*vo.Topic)
      gotom.LD("====>%d  \n", len(topiclist))
 
      if req.P("rfrom") == "ajax" {

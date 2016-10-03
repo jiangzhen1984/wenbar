@@ -3,6 +3,7 @@
 package vo
 
 import (
+    "gotom"
     "html/template"
     "strings"
     "time"
@@ -45,24 +46,36 @@ type TopicHtml struct {
 
 
 func (th * TopicHtml) PopulateTopicReHtml(val *Topic) {
+     if val == nil {
+         gotom.LP(" topic is nil")
+     }
      th.Tid          = val.Id
      th.Title        = val.Title
      th.Content      = template.HTML(strings.Replace(val.Content, "\n", "<br />", -1))
-     th.CreatorName  = val.Creator.Name
-     th.CreatorTitle = val.Creator.Title
-     th.CreatorId    = val.Creator.GetNativeID()
+     if val.Creator != nil {
+         th.CreatorName  = val.Creator.Name
+         th.CreatorTitle = val.Creator.Title
+         th.CreatorId    = val.Creator.GetNativeID()
+     } else {
+         gotom.LE("Ilegal user information for topic %s\n", val)
+     }
      th.UserCount    = val.Count
      th.Date         = val.GetElapsedTime()
      th.TimeStamp    = val.Date
 }
 
 func (th * TopicHtml) PopulateTopic(val *Topic) {
+     if val == nil {
+         gotom.LP(" topic is nil")
+     }
      th.Tid          = val.Id
      th.Title        = val.Title
      th.Content      = template.HTML(val.Content)
-     th.CreatorName  = val.Creator.Name
-     th.CreatorTitle = val.Creator.Title
-     th.CreatorId    = val.Creator.GetNativeID()
+     if val.Creator != nil {
+         th.CreatorName  = val.Creator.Name
+         th.CreatorTitle = val.Creator.Title
+         th.CreatorId    = val.Creator.GetNativeID()
+     }
      th.UserCount    = val.Count
      th.Date         = val.GetElapsedTime()
      th.TimeStamp    = val.Date

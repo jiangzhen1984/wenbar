@@ -31,7 +31,11 @@ func UserLoginCheck(req *gotom.GTRequest) bool {
 
 
 func Redirect(resp gotom.GTResponse,  req * gotom.GTRequest, url string) {
-         http.Redirect(*resp.Resp, req.Req, url, 302) 
+     http.Redirect(*resp.Resp, req.Req, url, 302) 
+}
+
+
+func Forward(resp gotom.GTResponse, req * gotom.GTRequest, url string) {
 }
 
 

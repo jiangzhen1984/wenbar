@@ -75,15 +75,15 @@ func CloseDBSession(dbs * DBSession) {
 
 
      
-type WService func(o ...*gotom.Object)  (* gotom.Object)
+type WService func(o ...gotom.Object)  (gotom.Object)
 
 
 
 
-type WSServiceFunc func(ds * DBSession, o ...*gotom.Object) (*gotom.Object, error)
+type WSServiceFunc func(ds * DBSession, o ...gotom.Object) (gotom.Object, error)
 
 
-func DoService(wf WSServiceFunc, o ...*gotom.Object) (* gotom.Object, error) {
+func DoService(wf WSServiceFunc, o ...gotom.Object) ( gotom.Object, error) {
       gotom.LI("====> %s\n", wf)
       gotom.LI("====> %s\n", o)
       sess := CreateDBSession() 

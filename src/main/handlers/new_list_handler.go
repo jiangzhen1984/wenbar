@@ -26,12 +26,10 @@ func NewestListHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * goto
           timestamp = strconv.FormatInt(time.Now().Unix(), 10)
      }
      gotom.LI(" query time >>> %s\n", timestamp)
-     ti  := gotom.Object(timestamp)
-     fs  := gotom.Object(DEFAULT_FETCH_SIZE)
-     gdata, err := ws.DoService(ws.GetNewestList, &ti, &fs)
+     gdata, err := ws.DoService(ws.GetNewestList, timestamp, DEFAULT_FETCH_SIZE)
      if err != nil {
      }
-     topiclist := (*gdata).([]*vo.Topic)
+     topiclist := gdata.([]*vo.Topic)
      
      gotom.LD("====>%d  \n", len(topiclist))
     
@@ -43,9 +41,10 @@ func NewestListHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * goto
           data := new(vo.HotListHtml)   
           data.TopicList = make([]vo.TopicHtml, 0, len(topiclist))
           for _, val := range topiclist {
-               vth := vo.TopicHtml{}
+               vth := &vo.TopicHtml{}
                vth.PopulateTopic(val)
-               data.TopicList = append(data.TopicList, vth)
+               gotom.LD("=======>%s\n", val)
+               data.TopicList = append(data.TopicList, *vth)
           }
     
           return tpls.Tpls["newest_list"], data, nil

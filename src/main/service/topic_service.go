@@ -16,11 +16,11 @@ type TopicList struct {
      TL  []*vo.Topic
 }
 
-func GetHotList(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
+func GetHotList(dbs * DBSession, p ...gotom.Object) (gotom.Object, error) {
      var topicList []*vo.Topic
      var ptime = time.Now().Unix()
      if p != nil && len(p) > 0 {
-          if ti, ok := (*p[0]).(string); ok == true {
+          if ti, ok := (p[0]).(string); ok == true {
               gotom.LD("  time %s  \n", ti)
               ptime, _ = strconv.ParseInt(ti, 10, 64)
           } else {
@@ -34,15 +34,14 @@ func GetHotList(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
      qr := sess.DB("test1").C("topic").Find(bson.M{"timestamp": bson.M{"$lt" : ptime}, "ispublic" : true}).Sort("-count", "-timestamp").Limit(10).All(&topicList)
 
      gotom.LD("=== topic len :%d   %s\n", len(topicList), qr)
-     gobj := gotom.Object(topicList)
-     return &gobj, nil
+     return topicList, nil
 }
 
-func GetNewestList(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
+func GetNewestList(dbs * DBSession, p ...gotom.Object) (gotom.Object, error) {
      var topicList []*vo.Topic
      var ptime = time.Now().Unix()
      if p != nil && len(p) > 0 {
-          if ti, ok := (*p[0]).(string); ok == true {
+          if ti, ok := (p[0]).(string); ok == true {
               gotom.LD("  time %s  \n", ti)
               ptime, _ = strconv.ParseInt(ti, 10, 64)
           } else {
@@ -54,24 +53,22 @@ func GetNewestList(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
      qr := sess.DB("test1").C("topic").Find(bson.M{"timestamp": bson.M{"$lt" : ptime}, "ispublic" : true}).Sort("-timestamp").Limit(10).All(&topicList)
 
      gotom.LD("=== topic len :%d   %s\n", len(topicList), qr)
-     gobj := gotom.Object(topicList)
-     return &gobj, nil
+     return topicList, nil
 }
 
 
-func SearchTopic(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
+func SearchTopic(dbs * DBSession, p ...gotom.Object) (gotom.Object, error) {
      var topicList []*vo.Topic
 
-     gobj := gotom.Object(topicList)
-     return &gobj, nil
+     return topicList, nil
 }
 
 
 
-func CreateTopic(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
+func CreateTopic(dbs * DBSession, p ...gotom.Object) (gotom.Object, error) {
      sess := dbs.GetMongoSession()      
      
-     ti, ok := (*p[0]).(vo.Topic)
+     ti, ok := (p[0]).(vo.Topic)
      if ok == true {
           ti.Date = time.Now()
           ti.Id = vo.Wid(bson.NewObjectId().Hex())
@@ -92,7 +89,7 @@ const (
    VIEWED_QUERY
 )
 
-func GetPersonalTopicList(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
+func GetPersonalTopicList(dbs * DBSession, p ...gotom.Object) (gotom.Object, error) {
      var topicList []*vo.Topic
      var err error
      var result []struct{ TopicId string `bson:"topicid"` }
@@ -101,20 +98,20 @@ func GetPersonalTopicList(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, e
           return nil, gotom.ErrorMsg("Parameter failed")
      }
 
-     ty, ok := (*p[0]).(int)
+     ty, ok := (p[0]).(int)
      if ok == false {
           gotom.LD("query type error %s\n", p[1])
           return nil, gotom.ErrorMsg("Type not support")
      }
 
-     ti, ok := (*p[1]).(time.Time)
+     ti, ok := (p[1]).(time.Time)
      if ok ==  false {
           ti = time.Now()
           gotom.LD("use default time to query personal topic %s\n", ti)
      }
      gotom.LD("use time to query personal topic %s\n", ti)
   
-     tid, ok := (*p[2]).(vo.Wid)
+     tid, ok := (p[2]).(vo.Wid)
      if ok ==  false {
           gotom.LD("query type error %s\n", p[2])
           return nil, gotom.ErrorMsg("Type not support")
@@ -145,18 +142,17 @@ func GetPersonalTopicList(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, e
      }
 
      gotom.LD("=== topic len :%d   %s\n", len(topicList), err)
-     gobj := gotom.Object(topicList)
-     return &gobj, nil
+     return topicList, nil
 }
 
 
 
 
-func GetTopicById(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
+func GetTopicById(dbs * DBSession, p ...gotom.Object) (gotom.Object, error) {
      
      var topic vo.Topic
 
-     tid, ok :=  (*p[0]).(string) 
+     tid, ok :=  (p[0]).(string) 
      if ok == false {
           return nil, gotom.ErrorMsg("NO such ID")
      }
@@ -165,8 +161,7 @@ func GetTopicById(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
      err := sess.DB("test1").C("topic").FindId(tid).One(&topic)
      gotom.LD(" query topic by Id %s  %s\n", tid, err) 
      if err == nil {
-         gobject := gotom.Object(&topic)
-         return &gobject, nil
+         return &topic, nil
      } else {
          return nil, gotom.ErrorMsg(" Query failed  !")
      }
@@ -174,10 +169,10 @@ func GetTopicById(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
 
 
 
-func UpdateTopicViewCount(dbs *DBSession, p...*gotom.Object) (*gotom.Object, error) {
+func UpdateTopicViewCount(dbs *DBSession, p...gotom.Object) (gotom.Object, error) {
 
      var tid string
-     tid, ok :=  (*p[0]).(string) 
+     tid, ok :=  (p[0]).(string) 
      if ok == false {
           return nil, gotom.ErrorMsg("NO such ID")
      }
@@ -194,12 +189,12 @@ func UpdateTopicViewCount(dbs *DBSession, p...*gotom.Object) (*gotom.Object, err
 
 
 
-func  RecordTopicViewUser(dbs * DBSession, p ...*gotom.Object) (*gotom.Object, error) {
+func  RecordTopicViewUser(dbs * DBSession, p ...gotom.Object) (gotom.Object, error) {
      if p == nil || len(p) <= 0{
      }
-     vt, ok := (*p[0]).(*vo.ViewTopic)
+     vt, ok := (p[0]).(*vo.ViewTopic)
      if ok == false {
-           gotom.LP("==== convert failed %s  \n", *p[0])
+           gotom.LP("==== convert failed %s  \n", p[0])
      }
    
      vt.Date       = time.Now()

@@ -103,6 +103,7 @@ func (u User) getUserTokenInfo(user * wechat.WeChatUser, ret bool, data interfac
      ar := data.(*wechat.AuthResponse)
      if u.WeChat == nil {
          pwc = new(PersonalWeChat)
+         u.WeChat = pwc
      } else {
          pwc = u.WeChat 
      }
@@ -111,8 +112,12 @@ func (u User) getUserTokenInfo(user * wechat.WeChatUser, ret bool, data interfac
      pwc.TokenTime     = time.Now().Unix()
      pwc.TokenExpired  = ar.Expires_in
     
-     gotom.LI("====> user %s\n", ar)
-     //TODO save user information to database 
+     gotom.LI("====> got token user %s\n", ar)
+ /*    gobj := gotom.Object(&u)
+     if _, err := ws.DoService(ws.UpdateUserWeChat, &gobj); err != nil {
+          gotom.LE("update wechat token failed %s\n", err)
+     }
+*/
 }
 
 func (u User) getUserInfo(user * wechat.WeChatUser, ret bool, data interface{}) {
@@ -120,6 +125,7 @@ func (u User) getUserInfo(user * wechat.WeChatUser, ret bool, data interface{}) 
      ar := data.(*wechat.UserInfoResp)
      if u.WeChat == nil {
          pwc = new(PersonalWeChat)
+         u.WeChat = pwc
      } else {
          pwc = u.WeChat 
      }
@@ -131,7 +137,11 @@ func (u User) getUserInfo(user * wechat.WeChatUser, ret bool, data interface{}) 
      pwc.Country     = ar.Country
      u.Avatar1       = pwc.Avatar
 
-     gotom.LI("====> user %s\n", ar)
-     //TODO save user information to database 
+     gotom.LI("====> get user info user %s\n", ar)
+/*     gobj := gotom.Object(&u)
+     if _, err := ws.DoService(ws.UpdateUserWeChat, &gobj); err != nil {
+          gotom.LE("update wechat information failed %s\n", err)
+     }
+*/
 }
 

@@ -9,20 +9,22 @@ import (
 
 func WeChatHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GTTemplateMapping)  (*gotom.GTTemplate, gotom.Object, error) {
 
+     gotom.LD("==== Cookies %s \n", req.Req.Cookies)
      if req.Req.Method == "GET" {
-          st := req.P("state")
-          gotom.LD("===we chat parameter state %s\n", st)
-          sess := req.GetSession()
-          uobj := sess.GetAttribute("user")
-          wuobj := sess.GetAttribute("wechatuser")
-          gotom.LD("==== wenbar user ===>%s \n", uobj)
-          gotom.LD("==== wechat user ===>%s \n", wuobj)
+         st := req.P("state")
+         code := req.P("code")
+         gotom.LD("===we chat parameter state %s   code:%s\n", st, code)
+         sess := req.CreateSession(resp)
+         user := new(vo.User)
+         sess.SetAttribute("user", user)
 
-          user := uobj.(*vo.User)
-          if wuobj != nil {
-                wechatuser := wuobj.(*wechat.WeChatUser)
-                wechatuser.AuthToken(user)
-          }
+         wechatuser := wechat.DC().InitWeChatUser()
+         wechatuser.UpdateAuthCode(code)
+         wechatuser.AuthToken(user)
+         sess.SetAttribute("wechatuser", wechatuser)
+         //TODO get user info
+         Redirect(resp, req, "/hot_list")
+
      }
 
      return nil, nil, nil

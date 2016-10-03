@@ -18,9 +18,8 @@ func TestCreateUser(t * testing.T) {
           t.Fatal(" create db session failed \n")
      }
 
-     u := vo.User{Name : "aaa" , Personal : &vo.UserPersonal{Incoming : 12.5}, WeChat : &vo.PersonalWeChat{OpenId: "1111"}}
-     gobj := gotom.Object(&u)
-     _, err := CreateUser(sess,&gobj)
+     u := &vo.User{Name : "aaa" , Personal : &vo.UserPersonal{Incoming : 12.5}, WeChat : &vo.PersonalWeChat{OpenId: "1111"}}
+     _, err := CreateUser(sess, u)
      if err != nil {
            t.Fatal(" create user failed  %s", err)
      }
@@ -42,8 +41,7 @@ func TestUpdateUser(t * testing.T) {
      }
 
      u := &vo.User{Name : "aaa" , Personal : &vo.UserPersonal{Incoming : 12.5}, WeChat : &vo.PersonalWeChat{OpenId: "1111"}}
-     gobj := gotom.Object(u)
-     _, err := CreateUser(sess,&gobj)
+     _, err := CreateUser(sess, u)
      if err != nil {
            t.Fatal(" create user failed  %s", err)
      }
@@ -53,14 +51,13 @@ func TestUpdateUser(t * testing.T) {
      }
 
 
-     gobjid := gotom.Object(vo.Wid(u.Uid))
      gotom.LD("===>%s\n", u.Uid)
-     gret, err := GetUserById(sess, &gobjid)
+     gret, err := GetUserById(sess, vo.Wid(u.Uid))
      if err != nil {
           t.Fatal("=== find prepared data failed %s\n", err)
      }
 
-     u = (*gret).(*vo.User) 
+     u = (gret).(*vo.User) 
      gotom.LD("==>%s \n", u)
      u.Name = "bbbb"
      u.WeChat.Unionid ="eeeeeeaaaaa"
@@ -69,18 +66,17 @@ func TestUpdateUser(t * testing.T) {
      u.Personal.BeViewed = 200
      u.Personal.Ans = 20
      u.Personal.Revenue = 20.5
-     gobj = gotom.Object(u)
-     _, err = UpdateUserPersonal(sess, &gobj)
+     _, err = UpdateUserPersonal(sess, u)
      if err != nil {
             t.Fatal(" failed ====> %s\n", err)
      }
 
-     gret, err = GetUserById(sess, &gobjid)
+     gret, err = GetUserById(sess, vo.Wid(u.Uid))
      if err != nil {
           t.Fatal("=== assert failed not found %s\n", err)
      }
 
-     u = (*gret).(*vo.User) 
+     u = (gret).(*vo.User) 
 
      if u.Personal.Ans != 20 || u.Personal.UnAns != 100 || u.Personal.BeViewed != 200 {
           t.Fatal("=== assert failed not match %s\n", u)
@@ -100,8 +96,7 @@ func TestUpdateUserWeChat(t * testing.T) {
      }
 
      u := &vo.User{Name : "aaa" , Personal : &vo.UserPersonal{Incoming : 12.5}, WeChat : &vo.PersonalWeChat{OpenId: "1111"}}
-     gobj := gotom.Object(u)
-     _, err := CreateUser(sess,&gobj)
+     _, err := CreateUser(sess, u)
      if err != nil {
            t.Fatal(" create user failed  %s", err)
      }
@@ -111,14 +106,13 @@ func TestUpdateUserWeChat(t * testing.T) {
      }
 
 
-     gobjid := gotom.Object(vo.Wid(u.Uid))
      gotom.LD("===>%s\n", u.Uid)
-     gret, err := GetUserById(sess, &gobjid)
+     gret, err := GetUserById(sess, vo.Wid(u.Uid))
      if err != nil {
           t.Fatal("=== find prepared data failed %s\n", err)
      }
 
-     u = (*gret).(*vo.User) 
+     u = (gret).(*vo.User) 
      gotom.LD("==>%s \n", u)
      u.Name = "bbbb"
      u.WeChat.Unionid = "testunion"
@@ -129,18 +123,17 @@ func TestUpdateUserWeChat(t * testing.T) {
      u.WeChat.Country = "b"
      u.WeChat.NickName = "test-nick"
      u.WeChat.Sex = "1"
-     gobj = gotom.Object(u)
-     _, err = UpdateUserWeChat(sess, &gobj)
+     _, err = UpdateUserWeChat(sess, u)
      if err != nil {
             t.Fatal(" failed ====> %s\n", err)
      }
 
-     gret, err = GetUserById(sess, &gobjid)
+     gret, err = GetUserById(sess, vo.Wid(u.Uid))
      if err != nil {
           t.Fatal("=== assert failed not found %s\n", err)
      }
 
-     u = (*gret).(*vo.User) 
+     u = (gret).(*vo.User) 
 
      gotom.LD("==>%s\n", u)
      if u.WeChat.Sex != "1" || u.WeChat.City != "a" || u.WeChat.Token != "abcd"  ||u.WeChat.TokenTime != tr || u.WeChat.NickName != "test-nick"  || u.WeChat.Unionid != "testunion" {

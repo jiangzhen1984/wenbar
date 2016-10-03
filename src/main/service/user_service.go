@@ -8,28 +8,27 @@ import (
      "gopkg.in/mgo.v2/bson"
 )
 
-func GetUserWS(dbs * DBSession, o... *gotom.Object) (*gotom.Object, error) {
+func GetUserWS(dbs * DBSession, o... gotom.Object) (gotom.Object, error) {
      return nil,nil
 }
 
 
 
-func GetUserById(dbs * DBSession, o... *gotom.Object) (*gotom.Object, error) {
+func GetUserById(dbs * DBSession, o... gotom.Object) (gotom.Object, error) {
 
      var user vo.User
 
      if o == nil || len(o) <= 0 {
            return nil, gotom.ErrorMsg("Parameter not statist \n")
      }
-     if uid, ok := (*o[0]).(vo.Wid); ok == true {
+     if uid, ok := (o[0]).(vo.Wid); ok == true {
            sess := dbs.GetMongoSession()
            gotom.LD("==== query uid :%s\n", uid)
            err := sess.DB("test1").C("user").Find(bson.M{"_id" : uid}).One(&user) 
            if err != nil {
                 return nil, gotom.E(" query failed %s\n", err)
            } else {
-                gobject := gotom.Object(&user)
-                return &gobject, nil
+                return &user, nil
            }
      } else {
            return nil, gotom.E(" type not support for uid %s\n", o[0])
@@ -39,12 +38,12 @@ func GetUserById(dbs * DBSession, o... *gotom.Object) (*gotom.Object, error) {
 }
 
 
-func CreateUser(dbs * DBSession, o... *gotom.Object) (*gotom.Object, error) {
+func CreateUser(dbs * DBSession, o... gotom.Object) (gotom.Object, error) {
 
-     if user, ok := (*o[0]).(*vo.User); ok == true {
+     if user, ok := o[0].(*vo.User); ok == true {
           sess := dbs.GetMongoSession()
           user.Uid = vo.Wid(bson.NewObjectId().Hex())
-          err := sess.DB("test1").C("user").Insert(user)
+          err := sess.DB("test1").C("user").Insert(*user)
           return nil, err
      }
 
@@ -54,8 +53,8 @@ func CreateUser(dbs * DBSession, o... *gotom.Object) (*gotom.Object, error) {
 
 
 
-func UpdateUserPersonal(dbs * DBSession, o... *gotom.Object) (*gotom.Object, error) {
-     if user, ok := (*o[0]).(*vo.User); ok == true {
+func UpdateUserPersonal(dbs * DBSession, o... gotom.Object) (gotom.Object, error) {
+     if user, ok := (o[0]).(*vo.User); ok == true {
           sess := dbs.GetMongoSession()
           gotom.LD("===%s\n", user.WeChat.Unionid)
           query := bson.M{"_id" : string(user.Uid)} 
@@ -77,8 +76,8 @@ func UpdateUserPersonal(dbs * DBSession, o... *gotom.Object) (*gotom.Object, err
      return nil, gotom.ErrorMsg("Parameter incorrect")
 }
 
-func UpdateUserWeChat(dbs * DBSession, o... *gotom.Object) (*gotom.Object, error) {
-     if user, ok := (*o[0]).(*vo.User); ok == true {
+func UpdateUserWeChat(dbs * DBSession, o... gotom.Object) (gotom.Object, error) {
+     if user, ok := (o[0]).(*vo.User); ok == true {
           sess := dbs.GetMongoSession()
           query := bson.M{"_id" : string(user.Uid) , "wechat.openid" : user.WeChat.OpenId} 
           updater := bson.M{

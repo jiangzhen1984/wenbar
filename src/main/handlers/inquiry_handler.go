@@ -27,9 +27,8 @@ func InquiryHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.G
           }
 
           gotom.LD(" query user id according to %s\n", uid)
-          pouser := gotom.Object(vo.Wid(uid))
-          if gobject, err := ws.DoService(ws.GetUserById, &pouser); err == nil {
-               user := (*gobject).(*vo.User)
+          if gobject, err := ws.DoService(ws.GetUserById, vo.Wid(uid)); err == nil {
+               user := gobject.(*vo.User)
                //shuold always  okay
                
                inq.InqName    = user.Name
@@ -81,8 +80,7 @@ func InquiryHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.G
                topic.IsPublic   = true
                gotom.LI("Force update topic public to true caused by no askto")
           }
-          gtopic  := gotom.Object(topic)
-          _, err := ws.DoService(ws.CreateTopic, &gtopic) 
+          _, err := ws.DoService(ws.CreateTopic, topic) 
           if err != nil {
                 inq.ErrMsg = "提交问题失败"
                 return tpls.Tpls["inquiry"], inq, nil

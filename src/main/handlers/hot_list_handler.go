@@ -15,6 +15,7 @@ import (
 
 func HotListHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GTTemplateMapping)  (*gotom.GTTemplate, gotom.Object, error) {
      gotom.LF()
+     gotom.LD("==== Cookies %s \n", req.Req.Cookies())
      var timestamp string
 
      if tpls == nil {
@@ -27,12 +28,10 @@ func HotListHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.G
           timestamp = strconv.FormatInt(time.Now().Unix(), 10)
      }
      gotom.LI(" query time >>> %s\n", timestamp)
-     ti  := gotom.Object(timestamp)
-     fs  := gotom.Object(DEFAULT_FETCH_SIZE)
-     gdata, err := ws.DoService(ws.GetHotList, &ti, &fs)
+     gdata, err := ws.DoService(ws.GetHotList, timestamp, DEFAULT_FETCH_SIZE)
      if err != nil {
      }
-     topiclist := (*gdata).([]*vo.Topic)
+     topiclist := gdata.([]*vo.Topic)
      
      gotom.LD("====>%d  \n", len(topiclist))
 
