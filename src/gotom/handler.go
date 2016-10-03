@@ -45,6 +45,23 @@ func (gth GoTomTplHandler) OnHandle(resp http.ResponseWriter, req * http.Request
 
 
 
+func ForwardTo(resp GTResponse, req * GTRequest, tpls * GTTemplateMapping, uri string) (*GTTemplate, Object, error) {
+    var m *Mapping
+    for _, tm := range GConf.Mapping {
+          if tm.Uri == req.Req.URL.Path {
+               m = tm
+               break
+          }
+    }
+    LI(" Forward to %p\n", m)
+    if m != nil {
+         return m.Hld(resp, req, tpls)
+    } else {
+         return nil, nil, ErrorMsg(" No such router chain ==>%s\n", req.Req.URL)
+    }
+}
+
+
 
 type GoTomTplHandler func(resp GTResponse, req * GTRequest, tpls * GTTemplateMapping) (*GTTemplate, Object, error)
 
