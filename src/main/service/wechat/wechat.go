@@ -259,7 +259,7 @@ func (wc * WeChatUser) GetUserInfoFromServer(handler WeChatRespHandler) error {
 
 
 const (
-     RESPONSE_TYPE_SERVER_AUTH  = 1
+     RESPONSE_TYPE_SERVER_AUTH  = iota
      RESPONSE_TYPE_USER_AUTH 
      RESPONSE_TYPE_GET_USER_INFO
 )
@@ -289,6 +289,8 @@ type UserInfoResp struct {
       City            string
       UnionId         string
       Headimgurl      string
+      Sex             string
+      Country         string
 }
 
 

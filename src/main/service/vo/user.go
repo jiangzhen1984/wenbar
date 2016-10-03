@@ -11,7 +11,7 @@ import (
 
 type User struct {
 
-     Uid       Wid
+     Uid       Wid     `json:"id" bson:"_id,omitempty"`
      
      Name      string 
 
@@ -59,7 +59,7 @@ type PersonalWeChat struct {
 
      NickName      string
   
-     Sex           int
+     Sex           string
 
      Province      string
 
@@ -89,6 +89,8 @@ func (u User) OnResponse(t int, us * wechat.WeChatUser, ret bool, data interface
      switch t {
           case wechat.RESPONSE_TYPE_USER_AUTH:
                 u.getUserTokenInfo(us, ret, data)
+          case wechat.RESPONSE_TYPE_GET_USER_INFO:
+                u.getUserInfo(us, ret, data)
           default:
                 gotom.LW("Unkown type of response %d\n", t)
      }
@@ -97,14 +99,39 @@ func (u User) OnResponse(t int, us * wechat.WeChatUser, ret bool, data interface
 
 
 func (u User) getUserTokenInfo(user * wechat.WeChatUser, ret bool, data interface{}) {
-     ar := data.(wechat.AuthResponse)
-     pwc := new(PersonalWeChat)
+     var pwc *PersonalWeChat
+     ar := data.(*wechat.AuthResponse)
+     if u.WeChat == nil {
+         pwc = new(PersonalWeChat)
+     } else {
+         pwc = u.WeChat 
+     }
      pwc.OpenId        = ar.Openid
      pwc.Token         = ar.Access_token
      pwc.TokenTime     = time.Now().Unix()
      pwc.TokenExpired  = ar.Expires_in
     
-    gotom.LI("====> user %s\n", ar)
+     gotom.LI("====> user %s\n", ar)
+     //TODO save user information to database 
+}
+
+func (u User) getUserInfo(user * wechat.WeChatUser, ret bool, data interface{}) {
+     var pwc *PersonalWeChat
+     ar := data.(*wechat.UserInfoResp)
+     if u.WeChat == nil {
+         pwc = new(PersonalWeChat)
+     } else {
+         pwc = u.WeChat 
+     }
+     pwc.NickName    = ar.NickName
+     pwc.City        = ar.City
+     pwc.Unionid     = ar.UnionId
+     pwc.Avatar      = ar.Headimgurl
+     pwc.Sex         = ar.Sex
+     pwc.Country     = ar.Country
+     u.Avatar1       = pwc.Avatar
+
+     gotom.LI("====> user %s\n", ar)
      //TODO save user information to database 
 }
 
