@@ -52,9 +52,6 @@ func LF() {
 
 
 func LP(format string, v ...interface{}) {
-    if v == nil {
-        return
-    }
     GoTomLogger.Panicf(format, v...)
 }
 
