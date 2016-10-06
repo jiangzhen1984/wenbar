@@ -231,3 +231,6 @@ func initWeChatConfig(p string) [] * WeChatConfig {
            return nil
      }
 }
+
+
+

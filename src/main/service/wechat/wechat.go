@@ -232,7 +232,9 @@ func (wc * WeChatUser) AuthToken(handler WeChatRespHandler) {
     }
     gotom.LD("  parse %s   %s \n", err, ar)
 
-    wc.State = WC_USER_TOKEN
+    wc.State  =  WC_USER_TOKEN
+    wc.Token  =  ar.Access_token
+    wc.OpenId =  ar.Openid
  
     handler.OnResponse(RESPONSE_TYPE_USER_AUTH, wc, ret, ar)
 }
@@ -244,7 +246,7 @@ func (wc * WeChatUser) GetUserInfoFromServer(handler WeChatRespHandler) error {
      }
 
      gotom.LD("===== start to get user info\n")
-     userinfourl := wc.Conf.getRequestUrl(WE_REQ_URI_GET_USER_INFO) + "&access_token=" + wc.Token
+     userinfourl := wc.Conf.getRequestUrl(WE_REQ_URI_GET_USER_INFO) + "&access_token=" + wc.Token+"&openid=" + wc.OpenId
      ur := &UserInfoResp{}
      err := readDataFromServer(userinfourl, ur)
      if err == nil {
@@ -289,7 +291,7 @@ type UserInfoResp struct {
       City            string
       UnionId         string
       Headimgurl      string
-      Sex             string
+      Sex             int
       Country         string
 }
 

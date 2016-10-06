@@ -7,6 +7,7 @@ import (
     "main/service/vo"
     "gotom"
     "time"
+    "gopkg.in/mgo.v2/bson"
 )
 
 
@@ -94,6 +95,8 @@ func TestUpdateUserWeChat(t * testing.T) {
      if sess == nil {
           t.Fatal(" create db session failed \n")
      }
+     msess := sess.GetMongoSession()
+     msess.DB("test1").C("user").DropCollection()
 
      u := &vo.User{Name : "aaa" , Personal : &vo.UserPersonal{Incoming : 12.5}, WeChat : &vo.PersonalWeChat{OpenId: "1111"}}
      _, err := CreateUser(sess, u)
@@ -139,5 +142,43 @@ func TestUpdateUserWeChat(t * testing.T) {
      if u.WeChat.Sex != "1" || u.WeChat.City != "a" || u.WeChat.Token != "abcd"  ||u.WeChat.TokenTime != tr || u.WeChat.NickName != "test-nick"  || u.WeChat.Unionid != "testunion" {
           t.Fatal("=== assert failed not match %s\n", u)
      }
+
+
+
+    //Condition no userid
+     newuser := vo.User{}
+     _, err = UpdateUserWeChat(sess, newuser)
+     if err == nil || err.Error() != "Parameter incorrect" {
+            t.Fatal(" failed condition 2====> assert failed%s\n", err)
+     }
+
+     _, err = UpdateUserWeChat(sess, &newuser)
+     if err == nil || err.Error() != "Parameter incorrect" {
+            t.Fatal(" failed condition 2====> assert failed%s\n", err)
+     }
+
+     newuser.WeChat = &vo.PersonalWeChat{OpenId : "abcd", Token: "test-token"}
+     newuser.Personal = &vo.UserPersonal{}
+     newuser.Name = "name"
+     _, err = UpdateUserWeChat(sess, &newuser)
+     if err != nil {
+          gotom.LD("====> %s\n", err)
+          t.Fatal(" failed condition 2====> assert failed%s\n", err)
+     }
+
+     c, err := msess.DB("test1").C("user").Find(bson.M{"wechat.openid" : "abcd"}).Count()
+     if c != 1 {
+          gotom.LE("===== %d  %s\n", c, err)
+          t.Fatal(" assert failed  count mismatch \n")
+     }
+
+     newuser1 := vo.User{}
+     newuser1.WeChat = &vo.PersonalWeChat{OpenId : "abcd", Token: "test-token1"}
+     newuser1.Personal = &vo.UserPersonal{}
+     _, err = UpdateUserWeChat(sess, &newuser1)
+     if newuser1.Name != "name" {
+          t.Fatal(" assert failed mismatch \n")
+     }
+ 
 
 }

@@ -6,6 +6,7 @@ import (
     "main/service/wechat"
     "main/service/vo"
     "main/service"
+    "strconv"
     "time"
 )
 
@@ -18,7 +19,7 @@ type weChatRespHdr struct {
 
 func (h * weChatRespHdr) OnResponse(t int, us * wechat.WeChatUser, ret bool, data interface{}) {
      if !ret {
-           gotom.LD(" Handle wechatuser auth failed \n")
+           gotom.LD(" Handle wechat response  failed :%b \n", ret)
            return
      }
 
@@ -48,10 +49,11 @@ func (h * weChatRespHdr) getUserTokenInfo(user * wechat.WeChatUser, ret bool, da
      pwc.TokenTime     = time.Now().Unix()
      pwc.TokenExpired  = ar.Expires_in
     
-     gotom.LI("====> got token user %s\n", ar)
+     gotom.LI("====> got token user %s\n", h.user.WeChat)
      if _, err := ws.DoService(ws.UpdateUserWeChat, h.user); err != nil {
           gotom.LE("update wechat token failed %s\n", err)
      }
+     gotom.LI("====> User updated  %s\n", h.user)
      // after token get user personal information
      go user.GetUserInfoFromServer(wechat.WeChatRespHandler(h))
      
@@ -70,11 +72,11 @@ func (h * weChatRespHdr) getUserInfo(user * wechat.WeChatUser, ret bool, data in
      pwc.City        = ar.City
      pwc.Unionid     = ar.UnionId
      pwc.Avatar      = ar.Headimgurl
-     pwc.Sex         = ar.Sex
+     pwc.Sex         = strconv.Itoa(ar.Sex)
      pwc.Country     = ar.Country
      h.user.Avatar1  = pwc.Avatar
 
-     gotom.LI("====> get user info user %s\n", ar)
+     gotom.LI("====> get user info user %s\n", h.user.WeChat)
      if _, err := ws.DoService(ws.UpdateUserWeChat, h.user); err != nil {
           gotom.LE("update wechat information failed %s\n", err)
      }
