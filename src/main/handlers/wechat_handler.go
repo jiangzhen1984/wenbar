@@ -52,6 +52,9 @@ func (h * weChatRespHdr) getUserTokenInfo(user * wechat.WeChatUser, ret bool, da
      if _, err := ws.DoService(ws.UpdateUserWeChat, h.user); err != nil {
           gotom.LE("update wechat token failed %s\n", err)
      }
+     // after token get user personal information
+     go user.GetUserInfoFromServer(wechat.WeChatRespHandler(h))
+     
 }
 
 func (h * weChatRespHdr) getUserInfo(user * wechat.WeChatUser, ret bool, data interface{}) {
@@ -93,9 +96,7 @@ func WeChatHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GT
          wechatuser.UpdateAuthCode(code)
          wechatuser.AuthToken(wechat.WeChatRespHandler(&weChatRespHdr{user : user, wechat : wechatuser}))
          sess.SetAttribute("wechatuser", wechatuser)
-         //TODO get user info
          Redirect(resp, req, "/hot_list")
-
      }
 
      return nil, nil, nil
