@@ -92,6 +92,7 @@ func WeChatHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GT
          gotom.LD("===we chat parameter state %s   code:%s\n", st, code)
          sess := req.CreateSession(resp)
          user := new(vo.User)
+         user.Personal = new(vo.UserPersonal)
          sess.SetAttribute("user", user)
 
          wechatuser := wechat.DC().InitWeChatUser()

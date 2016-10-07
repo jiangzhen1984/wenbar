@@ -133,6 +133,7 @@ func UpdateUserWeChat(dbs * DBSession, o... gotom.Object) (gotom.Object, error) 
                              "wechat.sex"        : user.WeChat.Sex,
                              "wechat.token"      : user.WeChat.Token,
                              "wechat.tokentime"  : user.WeChat.TokenTime,
+                             "wechat.avatar"     : user.WeChat.Avatar,
                           },
                     }
           err := sess.DB("test1").C("user").Update(query, updater)

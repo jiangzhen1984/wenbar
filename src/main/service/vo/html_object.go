@@ -99,13 +99,13 @@ type LoginHtml struct {
 
 type PersonalHtml struct {
 
-
     Name         string
     Title        string
     Incoming     float32 
     Revenue      float32
     Fee          float32
     BeViewed     int
+    Avatar       string
 }
 
 

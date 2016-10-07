@@ -22,7 +22,7 @@ func PersonalHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.
            //TODO load user data
      }
 
-     data := vo.PersonalHtml{Name : user.Name,  Title : user.Title}
+     data := vo.PersonalHtml{Name : user.Name,  Title : user.Title, Avatar : user.Avatar1}
 
      return tpls.Tpls["personal"], data, nil
 }

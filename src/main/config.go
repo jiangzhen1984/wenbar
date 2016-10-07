@@ -17,7 +17,7 @@ var  WechatConf * wechat.WeChatConfig = &wechat.WeChatConfig {
 
 var conf *gotom.GTConfig = &gotom.GTConfig { 
      DebugMode      : true,
-     Port           : ":8080", 
+     Port           : ":8081", 
      Tpldir         : "./view/",
      Mapping        : []*gotom.Mapping {
                            {"/hot_list",      handlers.HotListHandler},
