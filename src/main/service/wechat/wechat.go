@@ -13,6 +13,7 @@ import (
      "math/rand"
      "strconv"
      "fmt"
+     "os"
 )
 
 
@@ -20,11 +21,13 @@ var WeChatConfs  []*WeChatConfig
 
 
 var WeChatURL = "https://api.weixin.qq.com"
+var WeChatFileURL = "http://file.api.weixin.qq.com"
 var requestUri []string = []string{
                            "/cgi-bin/token",
                            "/sns/oauth2/access_token",
                            "/sns/userinfo",
                            "/cgi-bin/ticket/getticket",
+                           "cgi-bin/media/get",
                            } 
 var WeChatUserAuthURL = "https://open.weixin.qq.com/connect/oauth2/authorize?"
 
@@ -34,6 +37,7 @@ const (
     WE_REQ_URI_USER_TOKEN
     WE_REQ_URI_GET_USER_INFO
     WE_REQ_URI_GET_JS_AUTH
+    WE_REQ_URI_GET_MEDIA_FILE
 )
 
 type WeChatConfig struct {
@@ -136,6 +140,34 @@ func (wcc * WeChatConfig) AuthJS() {
 }
 
 
+func (wcc * WeChatConfig) DownloadMediaFile(mid string, fp string) (bool) {
+      if wcc.Token == "" {
+           gotom.LE(" doesn't get token yet\n")
+           return false
+      }
+      url := wcc.getRequestUrl(WE_REQ_URI_GET_MEDIA_FILE) +"&media_id=" + mid
+      resp, err := http.Get(url)
+      if err != nil {
+           gotom.LE("Create response failed %s\n", err)
+           return false
+      }
+      content, err := ioutil.ReadAll(resp.Body)
+      defer resp.Body.Close()
+      if err != nil {
+          gotom.LE("Get Media file failed %s\n", err)
+          return false
+      }
+
+      err = ioutil.WriteFile(fp, content, os.ModePerm)
+      if err != nil {
+          gotom.LE("Write file failed %s\n", err)
+          return false
+      }
+      return true
+   
+}
+
+
 
 
 func (wcc * WeChatConfig) getRequestUrl(ty int) string {
@@ -149,6 +181,8 @@ func (wcc * WeChatConfig) getRequestUrl(ty int) string {
                return WeChatURL + wcc.requestUri[WE_REQ_URI_GET_USER_INFO] +"?appid=" + wcc.AppId+"&lang=zh_CN"
           case ty == WE_REQ_URI_GET_JS_AUTH:
                return WeChatURL + wcc.requestUri[WE_REQ_URI_GET_JS_AUTH] +"?"
+          case ty == WE_REQ_URI_GET_MEDIA_FILE:
+               return WeChatFileURL + wcc.requestUri[WE_REQ_URI_GET_MEDIA_FILE] +"?access_token="+wcc.Token
 
      }
      return ""
@@ -388,4 +422,4 @@ func readDataFromServer(url string, ar interface{}) error {
       }
 
 }
-   
+  

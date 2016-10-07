@@ -11,6 +11,7 @@ import (
     "main/service/wechat"
     "encoding/json"
     "strconv"
+    "time"
 )
 
 
@@ -90,6 +91,12 @@ func outputJsConfig(resp * gotom.GTResponse, req * gotom.GTRequest) {
 
 func updateAns(qid string, vid string) (int) {
      gotom.LD("==== qid %s   vid :%s\n", qid, vid)
+     mfile := "./" + qid +".amr"
+     ts := time.Now().Unix()    
+     ret:= wechat.DC().DownloadMediaFile(vid, mfile)
+     te := time.Now().Unix()
+     gotom.LI("Get wechat media ret:%b  cost :%d\n", ret, (te - ts))
+     //TODO  update answer
      return  0
 }
 
