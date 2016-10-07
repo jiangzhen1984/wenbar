@@ -5,15 +5,8 @@ package main
 import (
     "gotom"
     "main/handlers"
-    "main/service/wechat"
 )
 
-
-var  WechatConf * wechat.WeChatConfig = &wechat.WeChatConfig {
-   AppId       : "wxc95bca05a3e20730",
-   Secret      : "9b6ad04958e230c395257fed5784731a",
-   ResponseURL : "http://www.wenbar.com/wechat", 
-}
 
 var conf *gotom.GTConfig = &gotom.GTConfig { 
      DebugMode      : true,

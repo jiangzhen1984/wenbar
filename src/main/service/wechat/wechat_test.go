@@ -75,7 +75,7 @@ func morkAuthServer(wcc * WeChatConfig) {
 }
 
 func TestAuthServer(t * testing.T) {
-    weChatURL = "http://localhost:8080"
+    WeChatURL = "http://localhost:8080"
     requestUri = []string{"/cgi-bin/token", "/sns/oauth2/access_token", "/sns/userinfo"} 
     WeChatUserAuthURL = "http://localhost:8080/connect/oauth2/authorize?"
 
@@ -94,7 +94,7 @@ func TestAuthServer(t * testing.T) {
    } 
 
 
-    weChatURL = ""
+    WeChatURL = ""
     requestUri = []string{"", "", ""} 
     WeChatUserAuthURL = ""
 
@@ -116,7 +116,7 @@ func TestAuthServer(t * testing.T) {
 
 
 func TestBuildUserAuthUrl(t * testing.T) {
-   weChatURL = "http://localhost:8080"
+   WeChatURL = "http://localhost:8080"
    requestUri = []string{"/cgi-bin/token", "/sns/oauth2/access_token", "/sns/userinfo"} 
    WeChatUserAuthURL = "http://localhost:8080/connect/oauth2/authorize?"
 
@@ -177,7 +177,7 @@ func (u * WeChatUser)  OnResponse(t int, user * WeChatUser, ret bool, data inter
 }
 
 func TestUserAuthToken(t * testing.T) {
-    weChatURL = "http://localhost:8080"
+    WeChatURL = "http://localhost:8080"
     requestUri = []string{"/cgi-bin/token", "/sns/oauth2/access_token", "/sns/userinfo"} 
     WeChatUserAuthURL = "http://localhost:8080/connect/oauth2/authorize?"
 
@@ -196,7 +196,7 @@ func TestUserAuthToken(t * testing.T) {
 
 
 func TestGetUserInfo(t * testing.T) {
-    weChatURL = "http://localhost:8080"
+    WeChatURL = "http://localhost:8080"
     requestUri = []string{"/cgi-bin/token", "/sns/oauth2/access_token", "/sns/userinfo"} 
     WeChatUserAuthURL = "http://localhost:8080/connect/oauth2/authorize?"
 

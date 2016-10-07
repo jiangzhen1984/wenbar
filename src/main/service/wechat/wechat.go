@@ -15,7 +15,7 @@ import (
 var WeChatConfs  []*WeChatConfig
 
 
-var weChatURL = "https://api.weixin.qq.com"
+var WeChatURL = "https://api.weixin.qq.com"
 var requestUri []string = []string{"/cgi-bin/token", "/sns/oauth2/access_token", "/sns/userinfo"} 
 var WeChatUserAuthURL = "https://open.weixin.qq.com/connect/oauth2/authorize?"
 
@@ -111,11 +111,11 @@ func (wcc * WeChatConfig) getRequestUrl(ty int) string {
  
      switch {
           case ty == WE_REQ_URI_SERVER_TOKEN:
-               return weChatURL + wcc.requestUri[WE_REQ_URI_SERVER_TOKEN] +"?appid=" + wcc.AppId+"&secret=" + wcc.Secret+"&grant_type=client_credential"
+               return WeChatURL + wcc.requestUri[WE_REQ_URI_SERVER_TOKEN] +"?appid=" + wcc.AppId+"&secret=" + wcc.Secret+"&grant_type=client_credential"
           case ty == WE_REQ_URI_USER_TOKEN:
-               return weChatURL + wcc.requestUri[WE_REQ_URI_USER_TOKEN] +"?appid=" + wcc.AppId+"&secret=" + wcc.Secret+"&grant_type=authorization_code"
+               return WeChatURL + wcc.requestUri[WE_REQ_URI_USER_TOKEN] +"?appid=" + wcc.AppId+"&secret=" + wcc.Secret+"&grant_type=authorization_code"
           case ty == WE_REQ_URI_GET_USER_INFO:
-               return weChatURL + wcc.requestUri[WE_REQ_URI_GET_USER_INFO] +"?appid=" + wcc.AppId+"&lang=zh_CN"
+               return WeChatURL + wcc.requestUri[WE_REQ_URI_GET_USER_INFO] +"?appid=" + wcc.AppId+"&lang=zh_CN"
 
      }
      return ""
