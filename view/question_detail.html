@@ -5,6 +5,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>{{.Title}}</title>
 <link href="css/css.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery-2.1.1.min.js" ></script>
+<script type="text/javascript" src="js/question.js" ></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" ></script>
 </head>
 
 <body>
@@ -44,7 +47,7 @@
 
 <div class="cen_e">
     <a href=""><div class="ce_01">打赏</div></a>
-    <a href=""><div class="ce_01">回答问题</div></a>
+    <div class="ce_01" onclick="if (gstat== false) startRecord(); else stopRecord(); ">回答问题</div>
     <div class="ce_02">问吧推荐</div>
 </div>
 {{range .RelatedList}}
@@ -58,6 +61,10 @@
 	</ul>
 </div>
 {{end}}
+<script type="text/javascript">
+    var qid = "{{.Tid}}";
+    initjs();
+</script>
 <div class="foot"></div>
 </body>
 </html>

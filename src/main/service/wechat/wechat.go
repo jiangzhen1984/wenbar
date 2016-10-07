@@ -9,6 +9,10 @@ import (
      "time"
      "gotom"
      "net/url"
+     "crypto/sha1"
+     "math/rand"
+     "strconv"
+     "fmt"
 )
 
 
@@ -16,7 +20,12 @@ var WeChatConfs  []*WeChatConfig
 
 
 var WeChatURL = "https://api.weixin.qq.com"
-var requestUri []string = []string{"/cgi-bin/token", "/sns/oauth2/access_token", "/sns/userinfo"} 
+var requestUri []string = []string{
+                           "/cgi-bin/token",
+                           "/sns/oauth2/access_token",
+                           "/sns/userinfo",
+                           "/cgi-bin/ticket/getticket",
+                           } 
 var WeChatUserAuthURL = "https://open.weixin.qq.com/connect/oauth2/authorize?"
 
 
@@ -24,6 +33,7 @@ const (
     WE_REQ_URI_SERVER_TOKEN = iota
     WE_REQ_URI_USER_TOKEN
     WE_REQ_URI_GET_USER_INFO
+    WE_REQ_URI_GET_JS_AUTH
 )
 
 type WeChatConfig struct {
@@ -44,6 +54,14 @@ type WeChatConfig struct {
 
     requestUri   []string
 
+    Js           *WeChatJS
+}
+
+
+type WeChatJS struct {
+    AppId       string
+    Ticket      string 
+    JsApiList   []string
 }
 
 
@@ -53,6 +71,7 @@ func InitWeChatConfig(path string) []*WeChatConfig {
            if err := json.Unmarshal(data, &confs); err == nil {
                    for _, wcc := range confs {
                          wcc.requestUri = requestUri
+                         wcc.Js = &WeChatJS{AppId : wcc.AppId}
                    }
                    return confs
            } else {
@@ -106,6 +125,18 @@ func (wcc * WeChatConfig) AuthServer() bool {
 }
 
 
+func (wcc * WeChatConfig) AuthJS() {
+      url := wcc.getRequestUrl(WE_REQ_URI_GET_JS_AUTH) +"access_token=" + wcc.Token +"&type=jsapi"
+      ar := &JSAuthResponse{}
+      err := readDataFromServer(url, ar)
+      gotom.LD("===get js auth response : %s\n", ar)
+      if err == nil {
+           wcc.Js.Ticket = ar.Ticket           
+      }
+}
+
+
+
 
 func (wcc * WeChatConfig) getRequestUrl(ty int) string {
  
@@ -116,11 +147,35 @@ func (wcc * WeChatConfig) getRequestUrl(ty int) string {
                return WeChatURL + wcc.requestUri[WE_REQ_URI_USER_TOKEN] +"?appid=" + wcc.AppId+"&secret=" + wcc.Secret+"&grant_type=authorization_code"
           case ty == WE_REQ_URI_GET_USER_INFO:
                return WeChatURL + wcc.requestUri[WE_REQ_URI_GET_USER_INFO] +"?appid=" + wcc.AppId+"&lang=zh_CN"
+          case ty == WE_REQ_URI_GET_JS_AUTH:
+               return WeChatURL + wcc.requestUri[WE_REQ_URI_GET_JS_AUTH] +"?"
 
      }
      return ""
 }
 
+
+func (wjs *WeChatJS) GetSign(nonce string, timestamp time.Time, url string) (string) {
+     ts := timestamp.Unix()
+     str := "jsapi_ticket="+wjs.Ticket+"&noncestr="+nonce+"&timestamp="+strconv.Itoa(int(ts))+"&url=" + url
+     ret := sha1.Sum([]byte(str))
+     sign := fmt.Sprintf("%x", ret)
+     return sign
+}
+
+func (wjs *WeChatJS) S(url string) (string, time.Time, string) {
+     letterRunes := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+     rand.Seed(time.Now().UnixNano())
+     b := make([]rune, 12)
+     for i := range b {
+        b[i] = letterRunes[rand.Intn(len(letterRunes))]
+     }
+
+     nonce := string(b)
+     tr    := time.Now()
+     sign  := wjs.GetSign(nonce, tr, url)
+     return nonce, tr, sign
+}
 
 
 const (
@@ -279,6 +334,13 @@ type AuthResponse struct {
       Expires_in      int     `json:"expires_in"`
       Refresh_token   string
       Openid          string
+}
+
+type JSAuthResponse struct {
+      Errcode         int     `json:"errcode"`
+      Errmsg          string  `json:"errmsg"`
+      Ticket          string  `json:"ticket"`
+      Expires_in      int     `json:"expires_in"`
 }
 
 

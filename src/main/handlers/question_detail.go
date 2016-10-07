@@ -8,12 +8,19 @@ import (
     "gotom"
     "main/service"
     "main/service/vo"
+    "main/service/wechat"
+    "encoding/json"
+    "strconv"
 )
 
 
 func QuestionDetailHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GTTemplateMapping)  (*gotom.GTTemplate, gotom.Object, error) {
 
      if req.Req.Method == "GET" {
+         if req.P("type") == "wcjs" {
+               outputJsConfig(&resp, req)
+               return nil, nil, nil
+         }
          qid := req.Req.FormValue("qid") 
          if qid == "" || len(qid) <= 0 {
               //TODO redirect to error page
@@ -43,16 +50,47 @@ func QuestionDetailHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * 
                    rt.AskToName ="刘博士"
                    rt.AskToTitle = "北京中医药大学博士"
                    relatedList = append(relatedList, rt)
-             } 
+             }
  
              topicHtml.RelatedList = relatedList
              return tpls.Tpls["questiondetail"], &topicHtml, nil
          }
          gotom.LD("========not found question\n")
          return tpls.Tpls["questiondetail"], nil, nil
+     } else if req.Req.Method == "POST" {
+         qid := req.P("qid")
+         vid := req.P("vid")
+         updateAns(qid, vid)
      }
     
      return nil, nil, gotom.ErrorMsg("Not support method %s", req.Req.Method)
+}
+
+
+type JsConfig struct {
+       Appid        string `json:"appid"`
+       Timestamp    string `json:"timestamp"`
+       Nonce        string `json:"nonce"`
+       Sign         string `json:"sign"`
+}
+
+func outputJsConfig(resp * gotom.GTResponse, req * gotom.GTRequest) {
+     non, tm, sign := wechat.DC().Js.S("http://www.wenbar.cn/question?qid="+req.P("qid"))
+     jc := JsConfig {Appid : wechat.DC().AppId, Timestamp : strconv.Itoa(int(tm.Unix())),  Nonce : non, Sign : sign}
+     gotom.LD("=== config :%s\n", jc)
+
+     content, err := json.Marshal(jc)
+     if err != nil {
+           gotom.LE(" json marshall failed %s\n", err)
+     } else {
+           (*resp.Resp).Write(content)
+     }
+}
+
+
+func updateAns(qid string, vid string) (int) {
+     gotom.LD("==== qid %s   vid :%s\n", qid, vid)
+     return  0
 }
 
 
