@@ -49,8 +49,10 @@ func main() {
            gotom.LP("Initalize wechat config failed \n")
            return
     }
-    wechat.DC().AuthServer()
-    wechat.DC().AuthJS()
+    for _, conf := range wechat.WeChatConfs {
+        conf.AuthServer()
+        conf.AuthJS()
+    }
     ws.InitDB(ws.DBConfiguration{DBUrl:"localhost"})
     gotom.InitServer(conf)
 }
