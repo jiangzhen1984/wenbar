@@ -68,7 +68,7 @@ func SearchTopic(dbs * DBSession, p ...gotom.Object) (gotom.Object, error) {
 func CreateTopic(dbs * DBSession, p ...gotom.Object) (gotom.Object, error) {
      sess := dbs.GetMongoSession()      
      
-     ti, ok := (p[0]).(vo.Topic)
+     ti, ok := (p[0]).(*vo.Topic)
      if ok == true {
           ti.Date = time.Now()
           ti.Id = vo.Wid(bson.NewObjectId().Hex())
@@ -204,4 +204,42 @@ func  RecordTopicViewUser(dbs * DBSession, p ...gotom.Object) (gotom.Object, err
      sess.DB("test1").C("view_topic").Insert(vt)
     
      return nil,nil
+}
+
+
+
+func AddTopicAnswer(dbs * DBSession, p ...gotom.Object) (gotom.Object, error) {
+     if len(p) < 2 {
+           return nil, gotom.ErrorMsg("Parameter not enough")
+     }
+     topic, ok    := p[0].(*vo.Topic)
+     newans, aok  := p[1].(*vo.Answer)
+     if ok == false || aok == false {
+           return nil, gotom.ErrorMsg("Parameter type not *vo.Topic and *vo.Answer")
+     }
+     if newans.AnsUser == nil {
+           return nil, gotom.ErrorMsg("No user")
+     }
+
+     newans.Id = vo.Wid(bson.NewObjectId().Hex())
+     newans.Date = time.Now()
+     newans.UserId = newans.AnsUser.Uid
+
+     sess := dbs.GetMongoSession()
+     query := bson.M{"_id" : string(topic.Id)}
+     updater := bson.M{
+                  "$push" : 
+                    bson.M{
+                      "anslist" :
+                        bson.M{
+                            "_id"        : newans.Id,
+                            "date"       : newans.Date,
+                            "content"    : newans.Content,
+                            "userid"    : newans.UserId,
+                            "audiopath" : newans.AudioPath,
+                        },
+                    },
+                }
+     err := sess.DB("test1").C("topic").Update(query, updater)
+     return newans, err
 }

@@ -59,9 +59,13 @@ func QuestionDetailHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * 
          gotom.LD("========not found question\n")
          return tpls.Tpls["questiondetail"], nil, nil
      } else if req.Req.Method == "POST" {
+         cuser :=  GetLoggedUser(req)
+         if cuser == nil {
+             //TODO need to login first
+         }
          qid := req.P("qid")
          vid := req.P("vid")
-         updateAns(qid, vid)
+         updateAns(qid, vid, cuser)
      }
     
      return nil, nil, gotom.ErrorMsg("Not support method %s", req.Req.Method)
@@ -89,14 +93,17 @@ func outputJsConfig(resp * gotom.GTResponse, req * gotom.GTRequest) {
 }
 
 
-func updateAns(qid string, vid string) (int) {
+func updateAns(qid string, vid string, user * vo.User) (int) {
      gotom.LD("==== qid %s   vid :%s\n", qid, vid)
      mfile := "./" + qid +".amr"
      ts := time.Now().Unix()    
      ret:= wechat.DC().DownloadMediaFile(vid, mfile)
      te := time.Now().Unix()
      gotom.LI("Get wechat media ret:%b  cost :%d\n", ret, (te - ts))
-     //TODO  update answer
+     if gobject, err := ws.DoService(ws.GetTopicById, qid); err == nil {
+           ans := &vo.Answer{AudioPath : mfile, AnsUser : user}
+           ws.DoService(ws.AddTopicAnswer, gobject, ans)
+     }
      return  0
 }
 

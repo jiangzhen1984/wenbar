@@ -18,11 +18,11 @@ type Topic struct {
      Price     float32        `json:"price"`
      Count     uint32         `json:"count"`
      Date      time.Time      `json:"date,string"`
-     TimeStamp int64         `json:"timestamp,string"`
+     TimeStamp int64          `json:"timestamp,string"`
      Creator   *User          `json:"creator"`
      IsPublic  bool           `json:"inpub"`
      AskTo     Wid            `json:"askto"`
-     AnsList   []*Answer      `json:-` 
+     AnsList   []*Answer     
 }
 
 
@@ -56,9 +56,10 @@ func (t * Topic) GetElapsedTime() string {
 
 type Answer struct {
 
-    Id        Wid
+    Id        Wid         `json:"id" bson:"_id,omitempty"`
     Date      time.Time
-    AnsUser   *User
+    AnsUser   *User        `bson:"-"`	
+    UserId    Wid
     Content   string
     AudioPath string
 }

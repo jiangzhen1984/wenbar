@@ -80,7 +80,7 @@ func InquiryHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.G
                topic.IsPublic   = true
                gotom.LI("Force update topic public to true caused by no askto")
           }
-          _, err := ws.DoService(ws.CreateTopic, topic) 
+          _, err := ws.DoService(ws.CreateTopic, &topic) 
           if err != nil {
                 inq.ErrMsg = "提交问题失败"
                 return tpls.Tpls["inquiry"], inq, nil
