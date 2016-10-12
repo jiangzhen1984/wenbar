@@ -15,6 +15,7 @@
 <script type="text/javascript" src="js/jquery-2.1.1.min.js" ></script>
 <script type="text/javascript" src="js/loader.js" ></script>
 <script type="text/javascript" src="js/hot_list.js" ></script>
+<script type="text/javascript" src="js/audio_player.js" ></script>
 </head>
 
 <body >
@@ -27,11 +28,11 @@
         <div class="topic_tit">
           <a href="/question?qid={{.Tid}}" >{{.Content}}</a>
         </div>
-        <div class="topic_detail">             
-             <div> <span class="topic_detail_author">{{.CreatorName }}<!-- 刘宏俊--> | {{.CreatorTitle}} </div>
+        <div class="topic_detail">
+             <div> <span class="topic_detail_author">{{.CreatorName }}<!-- 刘宏俊--> |{{.AudioUrl}} {{.CreatorTitle}} </div>
              <div class="topic_detail_left">
              	<a href="/inquiry?anu={{.CreatorId}}" target="_self" ><img class="topic_detail_photo" src="images/3_10.jpg" align="middle"></a>
-                <a href="/question?qid={{.Tid}}" ><span class="topic_detail_words"><p><img class="topic_detail_bg_voice" align="top" src="images/icon_voice_13.png">1元偷偷看</p></span></a>
+                <span class="topic_detail_words" onclick="player.playOrStopUrl('{{.AudioUrl}}')" ><p><img class="topic_detail_bg_voice" align="top" src="images/icon_voice_13.png">1元偷偷看</p></span>
              </div>
        		 <div class="topic_detail_right"> 看过 {{.UserCount}} </div>  
              <div class="clear"></div>
@@ -50,6 +51,9 @@
         
     </ul>
 </div>
+<script type="text/javascript">
+    var player = new AudioPlayer();
+</script>
 </body>
 
 </html>

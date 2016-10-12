@@ -8,6 +8,7 @@ import (
     "main/service/wechat"
     "simulation"
     "os"
+    "time"
 )
 
 
@@ -43,6 +44,7 @@ func main() {
     if simuflag == true {
          gotom.LI("Use local wechat simuation server")
          go sim.InitSIMWeChatServer()
+         time.Sleep(3000)
     }
     wechat.WeChatConfs = wechat.InitWeChatConfig(wechatConfigPath)
     if wechat.WeChatConfs == nil || len(wechat.WeChatConfs) <= 0{
