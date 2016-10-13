@@ -4,11 +4,14 @@ package main
 
 import (
     "gotom"
+    "main/handlers"
     "main/service"
     "main/service/wechat"
     "simulation"
     "os"
     "time"
+    "encoding/json"
+    "io/ioutil"
 )
 
 
@@ -19,6 +22,7 @@ func main() {
     var wechatConfigPath string
     var port string
     var debugmode bool = false
+    var hostconf string
     for idx, arg := range os.Args {
          switch {
             case arg == "-s":
@@ -35,8 +39,30 @@ func main() {
                 port = os.Args[idx + 1]
             case arg == "-d":
                 debugmode = true
+            case arg == "-hc":
+                if len(os.Args) - 1 <= idx {
+                     gotom.LP(" argument incorrect -hc host_conf ")
+                }
+                hostconf = os.Args[idx + 1]
+                 
                 
          }
+    }
+
+
+    if hostconf != "" {
+         gotom.LD("===> read host config%s\n", hostconf)
+         if data, err := ioutil.ReadFile(hostconf); err == nil {
+              var hc handlers.HostConfig
+              if err := json.Unmarshal(data, &hc); err == nil {
+                   handlers.HostConf = &hc
+                   gotom.LD("===%s   %s\n", hc, err)
+              } else {
+                   gotom.LD("===%s   %s\n", hc, err)
+              }
+          } else {
+               gotom.LD("===> read host config%s\n", err)
+          }
     }
 
     conf.Port = ":" + port

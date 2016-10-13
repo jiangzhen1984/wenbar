@@ -8,6 +8,10 @@ import (
 )
 
 
+
+
+
+
 var conf *gotom.GTConfig = &gotom.GTConfig { 
      DebugMode      : true,
      Port           : ":8081", 

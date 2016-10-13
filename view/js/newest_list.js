@@ -9,6 +9,7 @@ var current_timestamp = null;
                      console.log("NO more data.");
                      return;
                   }
+                  json = json.list;
                   var el = $('#content');
                   for (var i = 0; i < json.length; i++) {
                       var str ="";

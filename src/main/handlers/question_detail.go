@@ -95,7 +95,7 @@ func outputJsConfig(resp * gotom.GTResponse, req * gotom.GTRequest) {
 
 func updateAns(qid string, vid string, user * vo.User) (int) {
      gotom.LD("==== qid %s   vid :%s\n", qid, vid)
-     mfile := "./" + qid +".amr"
+     mfile := "./ans_audio/" + qid +".amr"
      ts := time.Now().Unix()    
      ret:= wechat.DC().DownloadMediaFile(vid, mfile)
      te := time.Now().Unix()

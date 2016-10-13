@@ -35,19 +35,20 @@ func HotListHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.G
      
      gotom.LD("====>%d  \n", len(topiclist))
 
+     data := new(vo.HotListHtml)   
+     data.TopicList = make([]vo.TopicHtml, 0, len(topiclist))
+     for _, val := range topiclist {
+          vth := vo.TopicHtml{}
+          vth.PopulateTopic(val)
+          vth.AudioUrl = HostConf.AudioHost + vth.AudioUrl
+          data.TopicList = append(data.TopicList, vth)
+     }
     
      if "ajax" == req.P("rfrom") {
-          ret, _ := json.Marshal(topiclist) 
+          ret, _ := json.Marshal(data)
           (*resp.Resp).Write(ret)
           return nil, nil, nil
      } else {
-          data := new(vo.HotListHtml)   
-          data.TopicList = make([]vo.TopicHtml, 0, len(topiclist))
-          for _, val := range topiclist {
-               vth := vo.TopicHtml{}
-               vth.PopulateTopic(val)
-               data.TopicList = append(data.TopicList, vth)
-          }
           return tpls.Tpls["hot_list"], data, nil
      }
 }

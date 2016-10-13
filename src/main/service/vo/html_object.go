@@ -7,7 +7,7 @@ import (
     "html/template"
     "strings"
     "time"
-    "strconv"
+//    "strconv"
 )
 
 
@@ -21,7 +21,8 @@ type ItemPage struct {
 type HotListHtml struct {
 
     Title      string
-    TopicList  []TopicHtml
+    TopicList  []TopicHtml     `json:"list"`
+    Count      int
 }
 
 
@@ -64,8 +65,9 @@ func (th * TopicHtml) PopulateTopicReHtml(val *Topic) {
      th.UserCount    = val.Count
      th.Date         = val.GetElapsedTime()
      th.TimeStamp    = val.Date
+     th.TimeStamp    = val.Date
      //TODO use normal audio url
-     th.AudioUrl     = "http://kolber.github.io/audiojs/demos/mp3/juicy.mp3"
+     th.AudioUrl     = "/57ea18dd33bf7c2df00873b6.amr"
 }
 
 func (th * TopicHtml) PopulateTopic(val *Topic) {
@@ -83,8 +85,7 @@ func (th * TopicHtml) PopulateTopic(val *Topic) {
      th.UserCount    = val.Count
      th.Date         = val.GetElapsedTime()
      th.TimeStamp    = val.Date
-     //TODO use normal audio url
-     th.AudioUrl     = "http://kolber.github.io/audiojs/demos/mp3/juicy.mp3?" + strconv.Itoa(int(th.TimeStamp.Unix())
+     th.AudioUrl     = "/57ea18dd33bf7c2df00873b6.amr"
 }
 
 
