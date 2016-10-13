@@ -27,7 +27,7 @@ var requestUri []string = []string{
                            "/sns/oauth2/access_token",
                            "/sns/userinfo",
                            "/cgi-bin/ticket/getticket",
-                           "cgi-bin/media/get",
+                           "/cgi-bin/media/get",
                            } 
 var WeChatUserAuthURL = "https://open.weixin.qq.com/connect/oauth2/authorize?"
 
