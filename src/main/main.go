@@ -58,10 +58,10 @@ func main() {
                    handlers.HostConf = &hc
                    gotom.LD("===%s   %s\n", hc, err)
               } else {
-                   gotom.LD("===%s   %s\n", hc, err)
+                   gotom.LE("===%s   %s\n", hc, err)
               }
           } else {
-               gotom.LD("===> read host config%s\n", err)
+               gotom.LE("===> read host config%s\n", err)
           }
     }
 

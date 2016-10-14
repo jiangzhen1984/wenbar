@@ -95,13 +95,15 @@ func outputJsConfig(resp * gotom.GTResponse, req * gotom.GTRequest) {
 
 func updateAns(qid string, vid string, user * vo.User) (int) {
      gotom.LD("==== qid %s   vid :%s\n", qid, vid)
-     mfile := "./ans_audio/" + qid +".amr"
+     uripath := qid +"_" +strconv.Itoa(int(time.Now().Unix())) + ".amr"
+     //TODO distribute to different folder
+     mfile := HostConf.AudioRoot + uripath
      ts := time.Now().Unix()    
      ret:= wechat.DC().DownloadMediaFile(vid, mfile)
      te := time.Now().Unix()
      gotom.LI("Get wechat media ret:%b  cost :%d\n", ret, (te - ts))
      if gobject, err := ws.DoService(ws.GetTopicById, qid); err == nil {
-           ans := &vo.Answer{AudioPath : mfile, AnsUser : user}
+           ans := &vo.Answer{AudioPath : uripath, AnsUser : user}
            ws.DoService(ws.AddTopicAnswer, gobject, ans)
      }
      return  0

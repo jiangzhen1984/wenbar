@@ -65,9 +65,6 @@ func (th * TopicHtml) PopulateTopicReHtml(val *Topic) {
      th.UserCount    = val.Count
      th.Date         = val.GetElapsedTime()
      th.TimeStamp    = val.Date
-     th.TimeStamp    = val.Date
-     //TODO use normal audio url
-     th.AudioUrl     = "/57ea18dd33bf7c2df00873b6.amr"
 }
 
 func (th * TopicHtml) PopulateTopic(val *Topic) {
@@ -85,7 +82,6 @@ func (th * TopicHtml) PopulateTopic(val *Topic) {
      th.UserCount    = val.Count
      th.Date         = val.GetElapsedTime()
      th.TimeStamp    = val.Date
-     th.AudioUrl     = "/57ea18dd33bf7c2df00873b6.amr"
 }
 
 

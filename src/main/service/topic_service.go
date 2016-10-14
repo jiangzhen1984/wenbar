@@ -232,9 +232,9 @@ func AddTopicAnswer(dbs * DBSession, p ...gotom.Object) (gotom.Object, error) {
                     bson.M{
                       "anslist" :
                         bson.M{
-                            "_id"        : newans.Id,
-                            "date"       : newans.Date,
-                            "content"    : newans.Content,
+                            "_id"       : newans.Id,
+                            "date"      : newans.Date,
+                            "content"   : newans.Content,
                             "userid"    : newans.UserId,
                             "audiopath" : newans.AudioPath,
                         },

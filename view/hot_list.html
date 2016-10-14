@@ -7,15 +7,16 @@
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
 <title>主界面</title>
 
-<link href="css/page_style.css" rel="stylesheet" type="text/css">
+<link href="css/page_style.css" rel="stylesheet" type="text/css" />
+<link href="js/toast/jquery.toast.min.css" rel="stylesheet" type="text/css" />
 <style>
-
 
 </style>
 <script type="text/javascript" src="js/jquery-2.1.1.min.js" ></script>
+<script type="text/javascript" src="js/audio_player.js" ></script>
 <script type="text/javascript" src="js/loader.js" ></script>
 <script type="text/javascript" src="js/hot_list.js" ></script>
-<script type="text/javascript" src="js/audio_player.js" ></script>
+<script type="text/javascript" src="js/toast/jquery.toast.min.js" ></script>
 </head>
 
 <body >
@@ -32,7 +33,8 @@
              <div> <span class="topic_detail_author">{{.CreatorName }}<!-- 刘宏俊--> | {{.CreatorTitle}} </div>
              <div class="topic_detail_left">
              	<a href="/inquiry?anu={{.CreatorId}}" target="_self" ><img class="topic_detail_photo" src="images/3_10.jpg" align="middle"></a>
-                <span class="topic_detail_words" onclick="player.playOrStopUrl('{{.AudioUrl}}')" ><p><img class="topic_detail_bg_voice" align="top" src="images/icon_voice_13.png">1元偷偷看</p></span>
+                <span class="topic_detail_words" onclick="onAnsClicked('{{.AudioUrl}}')" ><p><img class="topic_detail_bg_voice" align="top" src="images/icon_voice_13.png">1元偷偷看</p></span>
+    
              </div>
        		 <div class="topic_detail_right"> 看过 {{.UserCount}} </div>  
              <div class="clear"></div>
@@ -52,7 +54,6 @@
     </ul>
 </div>
 <script type="text/javascript">
-    var player = new AudioPlayer();
 </script>
 </body>
 

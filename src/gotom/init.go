@@ -66,7 +66,10 @@ func InitServer(conf * GTConfig) {
    }
 
    GConf = conf
-   http.ListenAndServe(conf.Port, nil)
+   err := http.ListenAndServe(conf.Port, nil)
+   if err != nil {
+         LP(">>>>>>> server failed >>>>>> %s", err)
+   }
 }
    
 

@@ -40,7 +40,9 @@ func HotListHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.G
      for _, val := range topiclist {
           vth := vo.TopicHtml{}
           vth.PopulateTopic(val)
-          vth.AudioUrl = HostConf.AudioHost + vth.AudioUrl
+          if val.AnsList != nil && len(val.AnsList) > 0 {
+              vth.AudioUrl = HostConf.AudioHost + val.AnsList[0].AudioPath
+          }
           data.TopicList = append(data.TopicList, vth)
      }
     
