@@ -57,12 +57,6 @@ func GetNewestList(dbs * DBSession, p ...gotom.Object) (gotom.Object, error) {
 }
 
 
-func SearchTopic(dbs * DBSession, p ...gotom.Object) (gotom.Object, error) {
-     var topicList []*vo.Topic
-
-     return topicList, nil
-}
-
 
 
 func CreateTopic(dbs * DBSession, p ...gotom.Object) (gotom.Object, error) {
@@ -242,4 +236,34 @@ func AddTopicAnswer(dbs * DBSession, p ...gotom.Object) (gotom.Object, error) {
                 }
      err := sess.DB("test1").C("topic").Update(query, updater)
      return newans, err
+}
+
+
+
+func SearchTopic(dbs * DBSession, p ...gotom.Object) (gotom.Object, error) {
+     if p == nil || len(p) < 1 {
+           return nil, gotom.ErrorMsg("Parameter not enough")
+     }
+     gotom.LD("====> %s %d\n", p, len(p))
+
+     var topicList []*vo.Topic
+     var da time.Time
+     var tx string
+     var ok bool
+     if len(p) > 1 {
+         da, ok = p[1].(time.Time)
+         if ok == false {
+              return nil, gotom.ErrorMsg("Parameter type mismatch  time.Time")
+         }
+     } else {
+         da = time.Now()
+     }
+     tx, ok = p[0].(string)
+     if ok == false {
+           return nil, gotom.ErrorMsg("Parameter type mismatch  string")
+     }
+     gotom.LD(" search :%s  timestamp %s  => ", tx, da)
+     sess := dbs.GetMongoSession()
+     err := sess.DB("test1").C("topic").Find(bson.M{"date": bson.M{"$lte" : da}, "$text" : bson.M{"$search" : tx}}).Sort("-date").Limit(10).All(&topicList)
+     return topicList, err
 }
