@@ -14,9 +14,13 @@ import (
 
 
 func HotListHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GTTemplateMapping)  (*gotom.GTTemplate, gotom.Object, error) {
-     gotom.LF()
      gotom.LD("==== Cookies %s \n", req.Req.Cookies())
      var timestamp string
+
+     if "ts" == req.P("type") {
+          searchTopic(resp, req)
+          return nil,nil,nil
+     }
 
      if tpls == nil {
           gotom.LE("No template mapping \n")
@@ -55,5 +59,36 @@ func HotListHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.G
      }
 }
 
+
+
+func searchTopic(resp gotom.GTResponse, req * gotom.GTRequest) {
+     var st string
+     var ts int
+     var ti time.Time 
+     var err error
+     st = req.P("ts")
+     ts, err = strconv.Atoi(req.P("ts"))
+     if err != nil {
+         ti = time.Unix(int64(ts), 10) 
+     } else {
+         ti = time.Now()
+     }
+     gdata, err := ws.DoService(ws.SearchTopic, st, ti)
+     topiclist := gdata.([]*vo.Topic)
+
+     data := new(vo.HotListHtml)   
+     data.TopicList = make([]vo.TopicHtml, 0, len(topiclist))
+     for _, val := range topiclist {
+          vth := vo.TopicHtml{}
+          vth.PopulateTopic(val)
+          if val.AnsList != nil && len(val.AnsList) > 0 {
+              vth.AudioUrl = HostConf.AudioHost + val.AnsList[0].AudioPath
+          }
+          data.TopicList = append(data.TopicList, vth)
+     }
+
+     ret, _ := json.Marshal(data)
+     (*resp.Resp).Write(ret)
+}
 
 
