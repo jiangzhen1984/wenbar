@@ -65,8 +65,12 @@ function onAnsClicked(ul) {
 }
 
 
+var g_toast;
 function showNotification(str) {
-    $.toast({text : str, position: 'mid-center', hideAfter : -1,}); 
+    if (g_toast != undefined) {
+         g_toast.reset();
+    }
+    g_toast = $.toast({text : str, position: 'mid-center', hideAfter : 0,}); 
 }
 
 function showNoAns() {
