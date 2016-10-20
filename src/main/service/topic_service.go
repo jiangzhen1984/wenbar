@@ -264,6 +264,6 @@ func SearchTopic(dbs * DBSession, p ...gotom.Object) (gotom.Object, error) {
      }
      gotom.LD(" search :%s  timestamp %s  => ", tx, da)
      sess := dbs.GetMongoSession()
-     err := sess.DB("test1").C("topic").Find(bson.M{"date": bson.M{"$lte" : da}, "$text" : bson.M{"$search" : tx}}).Sort("-date").Limit(10).All(&topicList)
+     err := sess.DB("test1").C("topic").Find(bson.M{"date": bson.M{"$lte" : da}, "ispublic" : true,  "$text" : bson.M{"$search" : tx}}).Sort("-date").Limit(10).All(&topicList)
      return topicList, err
 }

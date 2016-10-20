@@ -18,9 +18,9 @@ a{ outline:none; text-decoration:none; color:#2e2e2e; }
 a:link{ text-decoration:none; }
 
 .top{ width:100%; height:auto; overflow:hidden; background-color:#f9f9f9; padding-top:15px; padding-bottom:20px;}
-.t_l{ float:left; width:25px; height:45px; margin-left:18px; display:inline;}
-.t_c{ float:left; font-weight:bold; font-size:1.2em; width:73%; text-align:center;}
-.t_r{ float:right; width:44px; height:44px; margin-right:8px;}
+.t_l{ float:left; width:30px; height:30px; margin-left:8px;}
+.t_c{ float:left; font-weight:bold; font-size:1.0em; width:70%; text-align:center;}
+.t_r{ float:right; width:30px; height:30px; margin-right:8px;}
 .cen_a{ width:100%; height:auto; overflow:hidden; margin-top:46px;}
 .ca_01{ float:left; width:77px; height:77px; margin-left:20px; display:inline;}
 .ca_02{ float:left; color:#a0a0a0; font-size:26px; margin-top:18px; margin-left:26px; display:inline;}

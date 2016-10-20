@@ -12,12 +12,14 @@
 </style>
 <script type="text/javascript" src="js/jquery-2.1.1.min.js" ></script>
 <script type="text/javascript" src="js/loader.js" ></script>
+<script type="text/javascript" src="js/audio_player.js" ></script>
 <script type="text/javascript" src="js/newest_list.js" ></script>
+<script type="text/javascript" src="js/toast/jquery.toast.min.js" ></script>
 </head>
 
 <body >
-<div class="search">
-    <button class="search_btn" type="submit"><img src="images/3_03.jpg"></button><input class="search_box" type="text" placeholder="搜索感兴趣的人和事件"  >
+<div>
+    <input class="search" id="text" type="text" placeholder="搜索感兴趣的人和事件"  style="position:fixed; left:10px;color:#000000">
 </div>
 <div class="content" id="content">
         {{range .TopicList}}
@@ -30,8 +32,8 @@
              <span class="topic_detail_author">{{.CreatorName }} | {{.CreatorTitle}}
              </div>
              <div class="topic_detail_left">
-             	<img class="topic_detail_photo" src="images/3_10.jpg" align="middle">
-                <a href="/question?qid={{.Tid}}" ><span class="topic_detail_words"><p><img class="topic_detail_bg_voice" align="top" src="images/icon_voice_13.png">1元偷偷看</p></span></a>
+             	<a href="/inquiry?anu={{.CreatorId}}" target="_self" ><img class="topic_detail_photo" src="images/3_10.jpg" align="middle"></a>
+                <span class="topic_detail_words" onclick="onAnsClicked('{{.AudioUrl}}')" ><p><img class="topic_detail_bg_voice" align="top" src="images/icon_voice_13.png">1元偷偷看</p></span>
              </div>
        		 <div class="topic_detail_right">
              看过 {{.UserCount}}
@@ -40,7 +42,8 @@
         </div>    
 	</div>
         <script type="text/javascript">
-              current_timestamp = new Date({{.TimeStamp}});
+              var po  = new PageObject('/newest_list', 'content',{{.TimeStamp}});
+              po.registerScroll();
         </script>
         {{end}}
 </div>
@@ -52,6 +55,20 @@
         
     </ul>
 </div>
+<script type="text/javascript">
+   var timer_id;
+   $("#text").bind("input", function() {
+       clearTimeout(timer_id);
+       var tv = $(this).val();
+       if (tv == "" || tv == undefined) {
+          po.timestamp = new Date();
+          po.load();
+       } else {
+          timer_id = setTimeout(function(){po.searchTopic(tv)}, 400);
+       }
+  
+   });
+</script>
 </body>
 
 </html>
