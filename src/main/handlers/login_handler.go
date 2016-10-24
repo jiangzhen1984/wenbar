@@ -4,6 +4,7 @@ package handlers
 
 import (
     "gotom"
+    "main/service"
     "main/service/vo"
     "main/service/wechat"
 )
@@ -28,7 +29,12 @@ func LoginHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * gotom.GTT
          return tpls.Tpls["login"], &vo.LoginHtml{From : from}, nil
      } else if req.Req.Method == "POST" {
          if req.P("type") == "cellphone" {
-              req.CreateSession(resp)
+              sess := req.CreateSession(resp)
+              user := new(vo.User)
+              user.Personal = new(vo.UserPersonal)
+              ws.DoService(ws.CreateUser, user)
+              sess.SetAttribute("user", user)
+              
               Redirect(resp, req, "/hot_list") 
          } else {
               wechatuser := wechat.DC().InitWeChatUser()

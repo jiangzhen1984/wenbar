@@ -114,14 +114,14 @@ func GetPersonalTopicList(dbs * DBSession, p ...gotom.Object) (gotom.Object, err
      sess := dbs.GetMongoSession()
      switch ty {
           case QUESTION_QUERY:
-              gotom.LD("own question query ==>%s\n", ti)
-              err = sess.DB("test1").C("topic").Find(bson.M{"date": bson.M{"$lte" : ti}, "creator.uid" : tid}).Sort("-date").Limit(10).All(&topicList)
+              gotom.LD("own question query ==>%d  => id %s\n", ti.Unix(), tid)
+              err = sess.DB("test1").C("topic").Find(bson.M{"timestamp": bson.M{"$lte" : ti.Unix()}, "creator._id" : tid}).Sort("-date").Limit(10).All(&topicList)
           case ANSWER_QUERY:
               gotom.LD("Ask to me query ==>%s\n", ti)
-              err = sess.DB("test1").C("topic").Find(bson.M{"date": bson.M{"$lte" : ti}, "askto" : tid}).Sort("-date").Limit(10).All(&topicList)
+              err = sess.DB("test1").C("topic").Find(bson.M{"timestamp": bson.M{"$lte" : ti.Unix()}, "askto" : tid}).Sort("-date").Limit(10).All(&topicList)
           case VIEWED_QUERY:
               gotom.LD("my viewed query ==>%s\n", tid)
-              query := bson.M{"date": bson.M{"$lte" : ti}, "viewuserid" : tid}
+              query := bson.M{"timestamp": bson.M{"$lte" : ti.Unix()}, "viewuserid" : tid}
               project := bson.M{"topicid" : 1}
               err := sess.DB("test1").C("view_topic").Find(query).Sort("-date").Limit(10).Select(project).All(&result)
               idlist := []string{}
