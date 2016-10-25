@@ -41,6 +41,7 @@ type TopicHtml struct {
      AnsList       []TopicAnswerList
      Date          string              `json:"date,string"`
      RecCount      uint32
+     ViewCount     uint32
      Price         float32
      TimeStamp     time.Time           `json:"timestamp,string"`
      RelatedList   []TopicHtml
@@ -63,6 +64,7 @@ func (th * TopicHtml) PopulateTopicReHtml(val *Topic) {
          gotom.LE("Ilegal user information for topic %s\n", val)
      }
      th.UserCount    = val.Count
+     th.ViewCount    = val.Count
      th.Date         = val.GetElapsedTime()
      th.TimeStamp    = val.Date
 }
@@ -80,6 +82,7 @@ func (th * TopicHtml) PopulateTopic(val *Topic) {
          th.CreatorId    = val.Creator.GetNativeID()
      }
      th.UserCount    = val.Count
+     th.ViewCount    = val.Count
      th.Date         = val.GetElapsedTime()
      th.TimeStamp    = val.Date
 }

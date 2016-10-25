@@ -59,7 +59,6 @@ AudioPlayer.prototype.play = function() {
         return;
     }
     this.state = this.AP_STATE_INIT;
-    console.log(this.ae);
     this.ae.play();
 }
 
@@ -146,7 +145,6 @@ AudioPlayer.prototype.registerAudioCB = function(ad) {
 
 
 AudioPlayer.prototype.addStateListener = function(cb) {
-     console.log(typeof cb);
      this.evt_cb = cb;
 };
 

@@ -29,9 +29,8 @@ func QuestionDetailHandler(resp gotom.GTResponse, req * gotom.GTRequest, tpls * 
          }
          if gobject, err := ws.DoService(ws.GetTopicById, qid); err == nil {
              topic, ok:= gobject.(*vo.Topic)
-             //TODO update topic view count
-             
-             ws.DoService(ws.UpdateTopicViewCount, topic)
+             //FIXME should use back-end event to do udpate
+             ws.DoService(ws.UpdateTopicViewCount, topic.Id)
              if user := GetLoggedUser(req); user != nil {
                   vt := new(vo.ViewTopic)
                   vt.ViewUser = user

@@ -15,6 +15,26 @@ import (
 )
 
 
+func printHelp() {
+    var str string
+
+    str = " ./main [-s] [-w] [-p] [-d] [-hc] [-h] \n"
+    str +="        -s  use simulation wechat server for authorization\n"
+    str +="        -w  wechat configuration file path \n"
+    str +="        -p  listen port \n"
+    str +="        -hc host configuration file path \n"
+    str +="        -h  print this \n"
+    str +="   E.G.\n"
+    str +="        bin/main -s \n"
+    str +="        bin/main -s  -p 8082\n"
+    str +="        bin/main -s  -p 8082 -w conf/conf.json\n"
+    str +="        bin/main -s  -p 8082 -w conf/conf.json  -hc host config \n"
+    str +="\n\n"
+
+    gotom.LI(str)
+}
+
+
 
 func main() {
     
@@ -44,8 +64,9 @@ func main() {
                      gotom.LP(" argument incorrect -hc host_conf ")
                 }
                 hostconf = os.Args[idx + 1]
-                 
-                
+            case arg == "-h":
+                printHelp();
+                return
          }
     }
 
@@ -63,8 +84,17 @@ func main() {
           } else {
                gotom.LE("===> read host config%s\n", err)
           }
+    } else {
+          handlers.HostConf = new(handlers.HostConfig)
+          gotom.LW("No host configuration ")
     }
 
+    if port == "" {
+         gotom.LW("Using default port 8081 for listening ")
+         port = "8081"
+    } else {
+         gotom.LW("Using  port %s for listening ", port)
+    }
     conf.Port = ":" + port
     conf.DebugMode = debugmode
     if simuflag == true {
@@ -72,10 +102,14 @@ func main() {
          go sim.InitSIMWeChatServer()
          time.Sleep(3000)
     }
-    wechat.WeChatConfs = wechat.InitWeChatConfig(wechatConfigPath)
-    if wechat.WeChatConfs == nil || len(wechat.WeChatConfs) <= 0{
-           gotom.LP("Initalize wechat config failed \n")
-           return
+    if wechatConfigPath == "" {
+         gotom.LW("No wechat configuration\n") 
+    } else {
+         wechat.WeChatConfs = wechat.InitWeChatConfig(wechatConfigPath)
+         if wechat.WeChatConfs == nil || len(wechat.WeChatConfs) <= 0{
+              gotom.LP("Initalize wechat config failed \n")
+              return
+         }
     }
     for _, conf := range wechat.WeChatConfs {
         conf.AuthServer()

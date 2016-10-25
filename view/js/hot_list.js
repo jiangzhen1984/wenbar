@@ -38,6 +38,6 @@ function showNotification(str) {
 }
 
 function showNoAns() {
-    $.toast({text : '该问题还在悬赏。。', position: 'mid-center', hideAfter : 1500,}); 
+    $.toast({text : '该问题还在悬赏。。', position: 'mid-center', hideAfter : 500,}); 
 }
 

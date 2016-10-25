@@ -165,8 +165,8 @@ func GetTopicById(dbs * DBSession, p ...gotom.Object) (gotom.Object, error) {
 
 func UpdateTopicViewCount(dbs *DBSession, p...gotom.Object) (gotom.Object, error) {
 
-     var tid string
-     tid, ok :=  (p[0]).(string) 
+     var tid vo.Wid
+     tid, ok :=  (p[0]).(vo.Wid) 
      if ok == false {
           return nil, gotom.ErrorMsg("NO such ID")
      }
