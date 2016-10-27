@@ -14,6 +14,14 @@ type GTEventType interface {
 }
 
 
+type GTShutDownEventType struct {
+}
+
+func (sdt GTShutDownEventType) GetEType() (int) {
+     return -1
+}
+
+
 type GTEventHandler interface {
 
     HandleEvent(evt * GTEvent)
@@ -81,6 +89,7 @@ func (looper * GTLooper) RemoveEventHandler(et GTEventType) {
 
 func (looper * GTLooper) WaitingForEvent() {
      looper.lock.Lock()
+     defer looper.lock.Unlock()
      if looper.shutdownFlag == true {
          LW(" event looper is already shutdown\n")
          return
@@ -89,6 +98,7 @@ func (looper * GTLooper) WaitingForEvent() {
          looper.isReady = true
      } else {
          LE(" event looper is already ready\n")
+         return
      }
      looper.lock.Unlock()
      LI(" start event loop ")
@@ -105,6 +115,7 @@ func (looper * GTLooper) IsReady() (bool) {
 func (looper * GTLooper) shutdown() {
      looper.lock.Lock()
      looper.shutdownFlag = true
+     looper.PostEvent(GTShutDownEventType{}, nil)
      looper.lock.Unlock()
 }
 
@@ -117,7 +128,7 @@ func (looper * GTLooper) handlerEvent() {
          if handler == nil {
               LW("No Such Handler :%s %s\n", ev.EType)
               continue
-         } 
+         }
          handler.HandleEvent(ev)
      }
 }
@@ -152,6 +163,7 @@ func PostEvent(et GTEventType, data interface{}) (*GTEvent) {
      ev.Data  = data
      if DefaultLooper.IsReady() == false {
            go DefaultLooper.WaitingForEvent()
+           //FIXME should wait few seconds to make sure subroutine alread run
      }
      postEventToLooper(ev, DefaultLooper)
      return ev

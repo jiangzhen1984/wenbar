@@ -41,8 +41,9 @@ func LE(format string, v  ...interface{}) {
 }
 
 func LV(level int, format string, v ...interface{}) {
-   
-   GoTomLogger.Output(3, fmt.Sprintf(loglevelarr[level]+format, v...)) 
+    if VLogLevel <= level {
+        GoTomLogger.Output(3, fmt.Sprintf(loglevelarr[level]+format, v...)) 
+    }
 }
 
 

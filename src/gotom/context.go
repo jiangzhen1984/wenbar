@@ -44,7 +44,7 @@ type GTSession struct {
 
     Ctx        *GTServerContext
 
-    valid    bool
+    valid      bool
 }
 
 
@@ -130,7 +130,8 @@ func (ctx * GTServerContext) CreateSession() *GTSession {
 
     sid  := uint64(rand.Int63())
     LI("new session id %d\n", sid)
-    session := &GTSession{Id:sid, attrs:nil} 
+    session := new(GTSession)
+    session.Id = sid
     session.Ctx =  SerCtx
     session.valid = true
     
@@ -292,6 +293,7 @@ func (sess * GTSession) Invalidate() {
     }
 
     sess.Ctx.RemoveSession(sess.Id) 
+    sess.Ctx = nil
     sess.valid = false
 }
 
@@ -323,7 +325,6 @@ func (req * GTRequest) SetAttribute(key string, value Object) {
     if req.attrs == nil {
          req.attrs = make(map[string]Object)
     }
-
     req.attrs[key] = value
 }
 
