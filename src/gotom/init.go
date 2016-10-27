@@ -15,6 +15,8 @@ func InitContext() *GTServerContext {
     defer ctxmu.Unlock()
     if SerCtx == nil {
          SerCtx = new(GTServerContext)
+         deh := &nativeEventHandler{}
+         AddEventHandler(nativeNewSessEvt{}, deh)
     }
 
     return SerCtx

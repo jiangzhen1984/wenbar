@@ -59,7 +59,7 @@ func TestCreateSession(t * testing.T) {
 
 
 func TestMemory(t * testing.T) {
-    var size = 300000;
+    var size = 3;
     VLogLevel = VWarn
     InitContext()
     var rm *runtime.MemStats = new(runtime.MemStats)

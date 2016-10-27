@@ -21,7 +21,7 @@ func (te * TestEvent) HandleEvent(evt * GTEvent) {
 
 
 func TestInitLooper(t * testing.T) {
-    looper := InitEventLooper("aaa", 10)
+    looper := InitEventLooper("aaa", nil, 10)
     if looper.Name != "aaa" || looper.IsReady() == true {
            t.Fatal("Name not correct or is ready")
     }
@@ -29,7 +29,7 @@ func TestInitLooper(t * testing.T) {
 
 
 func TestWaitingForEvent(t * testing.T) {
-    looper := InitEventLooper("aaa", 10)
+    looper := InitEventLooper("aaa", nil, 10)
     if looper.Name != "aaa" || looper.IsReady() == true {
            t.Fatal("Name not correct or is ready")
     }

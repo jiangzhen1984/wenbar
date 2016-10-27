@@ -17,6 +17,13 @@ const (
      ERR_PARMETER_NIL
 )
 
+
+
+const (
+     EVT_NEW_SESS_CREATE  = iota
+     EVT_SESS_EXPIRIED
+)
+
 type EnumRet uint
 
 
@@ -37,14 +44,16 @@ type GTServerContext struct {
 
 type GTSession struct {
 
-    Id         uint64
+    Id          uint64
 
-    attrs      map[string]Object
-    mu         sync.Mutex
+    attrs       map[string]Object
+    mu          sync.Mutex
 
-    Ctx        *GTServerContext
+    Ctx         *GTServerContext
 
-    valid      bool
+    valid       bool
+
+    LastModify  uint64
 }
 
 
@@ -80,6 +89,10 @@ type Object interface {}
 
 type MappingHandler interface {
     OnHandle(GTResponse, *GTRequest)
+}
+
+
+type EventListener interface {
 }
 
 
@@ -138,6 +151,9 @@ func (ctx * GTServerContext) CreateSession() *GTSession {
     ctx.sess[sid] = session 
 
     LI("context create new session %s\n", session)
+    
+    //post sess create event
+    PostEvent(nativeNewSessEvt{}, session)
     return session
 }
 

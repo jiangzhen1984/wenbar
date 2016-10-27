@@ -43,6 +43,22 @@ type GTControlEvent struct {
 }
 
 
+type GTLooperEventListener interface {
+
+     OnInit(looper * GTLooper)
+
+     OnStart(looper * GTLooper)
+
+     OnShutdown(looper * GTLooper)
+
+     OnEventHandle(looper * GTLooper, evt * GTEvent, handler GTEventHandler)
+
+     OnEventReceived(looper * GTLooper, evt * GTEvent)
+
+     OnError(looper * GTLooper, err error)
+}
+
+
 type GTLooper struct {
     
      Name             string
@@ -52,8 +68,10 @@ type GTLooper struct {
      isReady          bool
      lock             sync.Mutex 
 
-     queue           chan * GTEvent
+     queue            chan * GTEvent
      shutdownFlag     bool
+
+     el               GTLooperEventListener
 }
 
 
@@ -68,6 +86,7 @@ func (looper * GTLooper) PostEvent(et GTEventType, data interface{}) (*GTEvent) 
      st := looper.IsReady() 
      if st == false {
           LP("Looper not ready yet, call WaitingForEvent fisrt !\n")
+          return nil
      }
      ev := new(GTEvent)
      ev.EType = et
@@ -102,8 +121,17 @@ func (looper * GTLooper) WaitingForEvent() {
      }
      looper.lock.Unlock()
      LI(" start event loop ")
+     if looper.el != nil {
+          looper.el.OnStart(looper)
+     }
      looper.handlerEvent()
      LI(" event loop quit")
+}
+
+
+
+func (looper * GTLooper) StartLooper() {
+     go looper.WaitingForEvent()
 }
 
 
@@ -112,7 +140,7 @@ func (looper * GTLooper) IsReady() (bool) {
 }
 
 
-func (looper * GTLooper) shutdown() {
+func (looper * GTLooper) Shutdown() {
      looper.lock.Lock()
      looper.shutdownFlag = true
      looper.PostEvent(GTShutDownEventType{}, nil)
@@ -123,23 +151,38 @@ func (looper * GTLooper) shutdown() {
 func (looper * GTLooper) handlerEvent() {
      for looper.shutdownFlag != true {
          ev := <-looper.queue
+         if looper.el != nil {
+              looper.el.OnEventReceived(looper, ev)
+         }
          handler := looper.handlerMap[ev.EType.GetEType()]
          LD("===forward evt(%s)  to handler(%p)\n", ev, handler)
          if handler == nil {
               LW("No Such Handler :%s %s\n", ev.EType)
               continue
          }
+         if looper.el != nil {
+              looper.el.OnEventHandle(looper, ev, handler)
+         }
          handler.HandleEvent(ev)
+     }
+
+     
+     if looper.el != nil {
+          looper.el.OnShutdown(looper)
      }
 }
 
 
 
-func InitEventLooper(name string, size int) * GTLooper {
+func InitEventLooper(name string, evtListener  GTLooperEventListener, size int) * GTLooper {
      var looper * GTLooper = new(GTLooper)
-     looper.queue = make(chan * GTEvent, size)
-     looper.Name  = name
-     looper.handlerMap = make(map[int]GTEventHandler, 50)
+     looper.queue       = make(chan * GTEvent, size)
+     looper.Name        = name
+     looper.handlerMap  = make(map[int]GTEventHandler, 50)
+     looper.el          = evtListener
+     if looper.el != nil {
+          looper.el.OnInit(looper)
+     }
 
      return looper 
 }
@@ -162,7 +205,7 @@ func PostEvent(et GTEventType, data interface{}) (*GTEvent) {
      ev.EType = et
      ev.Data  = data
      if DefaultLooper.IsReady() == false {
-           go DefaultLooper.WaitingForEvent()
+           DefaultLooper.StartLooper()
            //FIXME should wait few seconds to make sure subroutine alread run
      }
      postEventToLooper(ev, DefaultLooper)
